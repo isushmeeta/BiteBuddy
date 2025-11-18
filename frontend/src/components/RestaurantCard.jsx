@@ -1,23 +1,29 @@
 import React from "react";
+import "./RestaurantCard.css";
 
 const RestaurantCard = ({ restaurant }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 w-64">
+    <div className="restaurant-card">
+      {/* Restaurant Image */}
       <img
-        src={restaurant.image}
+        src={restaurant.image}  // use lowercase 'restaurant'
         alt={restaurant.name}
-        className="w-full h-40 object-cover rounded-md"
+        className="restaurant-image"
       />
 
-      <h2 className="text-center font-bold mt-3 text-lg">
-        {restaurant.name}
-      </h2>
+      {/* Restaurant Name */}
+      <h3 className="restaurant-name">{restaurant.name}</h3>
 
-      <button className="mt-3 w-full bg-black text-white py-2 rounded-md">
-        VIEW MENU
-      </button>
+      {/* Rating */}
+      <p className="restaurant-rating">
+        ⭐ {restaurant.rating}
+      </p>
+
+      {/* View Menu Button */}
+      <button className="view-menu-btn">VIEW MENU</button>
     </div>
   );
 };
 
 export default RestaurantCard;
+

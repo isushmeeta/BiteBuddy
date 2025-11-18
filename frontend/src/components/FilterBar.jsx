@@ -1,11 +1,32 @@
-const Filters = ({ cuisine, rating, location, setCuisine, setRating, setLocation }) => {
+import React from "react";
+import "./FilterBar.css";
+
+const FilterBar = ({
+  cuisine = "",
+  rating = "",
+  location = "",
+  setCuisine = () => {},
+  setRating = () => {},
+  setLocation = () => {},
+}) => {
   return (
-    <div className="flex gap-4 mb-6">
-      {/* Cuisine Filter */}
+    <div
+      className="
+        filter-bar
+        flex items-center justify-between 
+        rounded-xl mx-auto mt-10 mb-10 
+        bg-[#D9D9D9]
+        px-4
+        gap-50
+      "
+      style={{ width: "500px", height: "50px", fontFamily: "Itim", fontSize: "28px" }}
+    >
+      {/* CUISINE */}
       <select
         value={cuisine}
         onChange={(e) => setCuisine(e.target.value)}
-        className="border rounded-md px-4 py-2"
+        className="bg-transparent outline-none text-black uppercase"
+        style={{ fontFamily: "Itim", fontSize: "20px" }}
       >
         <option value="">CUISINE</option>
         <option value="Japanese">Japanese</option>
@@ -14,22 +35,25 @@ const Filters = ({ cuisine, rating, location, setCuisine, setRating, setLocation
         <option value="Chinese">Chinese</option>
       </select>
 
-      {/* Rating Filter */}
+      {/* RATINGS */}
       <select
         value={rating}
         onChange={(e) => setRating(e.target.value)}
-        className="border rounded-md px-4 py-2"
+        className="bg-transparent outline-none text-black uppercase"
+        style={{ fontFamily: "Itim", fontSize: "20px" }}
       >
         <option value="">RATINGS</option>
         <option value="4">4.0+</option>
+        <option value="4.2">4.2+</option>
         <option value="4.5">4.5+</option>
       </select>
 
-      {/* Location Filter */}
+      {/* LOCATIONS */}
       <select
         value={location}
         onChange={(e) => setLocation(e.target.value)}
-        className="border rounded-md px-4 py-2"
+        className="bg-transparent outline-none text-black uppercase"
+        style={{ fontFamily: "Itim", fontSize: "20px" }}
       >
         <option value="">LOCATIONS</option>
         <option value="Dhaka">Dhaka</option>
@@ -40,5 +64,4 @@ const Filters = ({ cuisine, rating, location, setCuisine, setRating, setLocation
   );
 };
 
-export default Filters;
-
+export default FilterBar;
