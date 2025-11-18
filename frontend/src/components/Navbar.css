@@ -14,15 +14,15 @@
   font-weight: 400;
   font-size: 24px;
   color: black;
-  text-align: center;
+  text-align: right;
 }
 
 .title {
   flex-grow: 1;
   margin: 0 20px;
   background-color: #d3d3d3;
-  font-family: "Comic Sans MS", cursive, sans-serif;
-  font-size: 32px;
+  font-family: "itim", cursive, sans-serif;
+  font-size: 45px;
   font-weight: bold;
   text-align: center;
   padding: 10px 0;
@@ -36,7 +36,7 @@
   text-align: center;
   line-height: 40px;
   font-weight: bold;
-  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-family: "itim", cursive, sans-serif;
   color: black;
   cursor: pointer;
 }

@@ -104,8 +104,8 @@ const RestaurantListing = () => {
 
   return (
     <div className="min-h-screen p-10" style={{ backgroundColor: "#B197A4" }}>
-      <h1 className="text-center text-4xl font-extrabold mb-10 text-purple-900 tracking-wide">
-        BITE BUDDY
+      <h1 className="text-left text-5xl md:text-6xl font-extrabold mb-8 text-gradient bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent tracking-wide pl-6 md:pl-20">
+        RESTAURANT LISTING
       </h1>
 
       <FilterBar

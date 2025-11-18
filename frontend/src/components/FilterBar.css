@@ -20,10 +20,10 @@
 } */
 .filter-bar {
   display: flex;
-  gap: 30px;          /* space between each filter */
-  margin-top: 20px;
+  gap: 20px;          /* space between each filter */
+  margin-top: 15px;
   flex-wrap: nowrap;   /* keep all in single row */
-  justify-content: center; /* center the whole filter bar */
+  justify-content: right; /* center the whole filter bar */
 }
 
 .filter-bar select {
