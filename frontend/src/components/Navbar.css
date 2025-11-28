@@ -38,5 +38,11 @@
   font-weight: bold;
   font-family: "itim", cursive, sans-serif;
   color: black;
-  cursor: pointer;
+    cursor: pointer;
 }
+.profile-icon {
+  font-size: 70px;
+  cursor: pointer;
+  color: #333;
+}
+

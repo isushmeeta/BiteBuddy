@@ -1,7 +1,7 @@
 .restaurant-card {
   background-color: #d3d3d3;
   padding: 15px;
-  width: 235px;
+  width: 230px;
   text-align: center;
   font-family: "Comic Sans MS", cursive, sans-serif;
   border-radius: 5px;
@@ -11,7 +11,7 @@
 
 .restaurant-card img {
   width: 100%;
-  height: auto;
+  height: 60%;
   object-fit: contain;
   /* margin-bottom: 1px; */
 }
