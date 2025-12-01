@@ -1,23 +1,4 @@
-/* .filter-bar {
-  display: flex;
-  gap: 15px;
-  margin-top: 10px;
-}
 
-.filter-bar select {
-  background-color: #d3d3d3;
-  border: none;
-  padding: 10px 20px;
-  font-family: "Comic Sans MS", cursive, sans-serif;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 16px 16px;
-} */
 .filter-bar {
   display: flex;
   gap: 20px;          /* space between each filter */

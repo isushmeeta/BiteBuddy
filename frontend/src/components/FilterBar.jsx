@@ -33,6 +33,7 @@ const FilterBar = ({
         <option value="Fast Food">Fast Food</option>
         <option value="Indian">Indian</option>
         <option value="Chinese">Chinese</option>
+        <option value="Bangali">Bangali</option>
       </select>
 
       {/* RATINGS */}
@@ -59,6 +60,9 @@ const FilterBar = ({
         <option value="Dhaka">Dhaka</option>
         <option value="Chittagong">Chittagong</option>
         <option value="Sylhet">Sylhet</option>
+        <option value="Barisal">Barisal</option>
+        <option value="Khulna">Khulna</option>
+        <option value="Faridpur">Faridpur</option>
       </select>
     </div>
   );

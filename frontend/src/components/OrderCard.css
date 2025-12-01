@@ -1,32 +1,23 @@
-.restaurant-card {
-  background-color: #d3d3d3;
+  .order-card {
+  background-color:  #b08ea3;
   padding: 5px;
   width: 230px;
   text-align: center;
   font-family: "Comic Sans MS", cursive, sans-serif;
   border-radius: 5px;
   box-sizing: border-box;
-  margin: 2px;
-}
+  margin: 2px;}
 
-.restaurant-card img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  margin-bottom: 1px; 
- }
-
-
-
-.restaurant-card h3 {
+  
+.order-card h3 {
   margin: 2px 0;
   font-weight: bold;
 }
 
-.restaurant-card button {
-  background-color: white;
+.order-card {
+  background-color:#d3d3d3;
   border: none;
-  padding: 8px 15px;
+  padding: 6px 12px;
   cursor: pointer;
   font-family: monospace;
   font-weight: 600;
@@ -34,7 +25,7 @@
   transition: background-color 0.3s ease;
 }
 
-.restaurant-card button:hover {
+.order-card button:hover {
   background-color: #b08ea3;
   color: white; 
  }

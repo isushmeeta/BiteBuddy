@@ -2,6 +2,7 @@
 import React from "react";
 import "./Navbar.css";
 import { FaUserCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -9,7 +10,9 @@ const Navbar = () => {
       <div className="logo">BITE BUDDY</div>
       <div className="title">BITE BUDDY</div>
 
-      <FaUserCircle className="profile-icon" />
+      <Link to="/profile">
+        <FaUserCircle className="profile-icon" />
+      </Link>
     </nav>
   );
 };
