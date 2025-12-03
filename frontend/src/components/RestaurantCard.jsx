@@ -1,7 +1,12 @@
 import React from "react";
 import "./RestaurantCard.css";
+import { useNavigate } from "react-router-dom";
+
+
 
 const RestaurantCard = ({ restaurant }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="restaurant-card">
       {/* Restaurant Image */}
@@ -20,7 +25,10 @@ const RestaurantCard = ({ restaurant }) => {
       </p>
 
       {/* View Menu Button */}
-      <button className="view-menu-btn">VIEW MENU</button>
+
+      <button
+      onClick={() => navigate(`/menu/${restaurant._id}`)}
+      className="view-menu-btn">VIEW MENU</button>
     </div>
   );
 };

@@ -19,6 +19,10 @@ app.use("/api/restaurants", restaurantRoutes);
 const orderRoutes = require("./routes/orderRoutes");
 app.use("/api/orders", orderRoutes); // mount router directly
 
+const menuRoutes = require("./routes/menuRoutes");
+app.use("/api/menu", menuRoutes);
+
+
 // Start server
 const PORT = process.env.PORT || 9169;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

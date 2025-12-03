@@ -1,4 +1,4 @@
-// models/Order.js
+
 const mongoose = require("mongoose");
 
 // Sub-schema for items in an order
@@ -10,8 +10,8 @@ const itemSchema = new mongoose.Schema({
 
 // Main order schema
 const orderSchema = new mongoose.Schema({
-  orderId: { type: String, required: true, unique: true }, // e.g. "ORD1001"
-  customerId: { type: String, required: true }, // e.g. "USER001"
+  orderId: { type: String, required: true, unique: true },
+  customerId: { type: String, required: true },
   restaurantName: { type: String, required: true },
   orderDate: { type: Date, default: Date.now },
   totalPrice: { type: Number, required: true },
@@ -20,8 +20,9 @@ const orderSchema = new mongoose.Schema({
   status: { type: String, enum: ["Pending", "Delivered", "Cancelled", "Preparing"], default: "Pending" },
 }, { timestamps: true });
 
-// Add index to speed up queries by customer and orderDate
+// Index to speed up queries
 orderSchema.index({ customerId: 1, orderDate: -1 });
 
-// Export the model
 module.exports = mongoose.model("Order", orderSchema, "orders");
+
+
