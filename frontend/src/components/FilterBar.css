@@ -1,0 +1,29 @@
+
+.filter-bar {
+  display: flex;
+  gap: 20px;          /* space between each filter */
+  margin-top: 15px;
+  flex-wrap: nowrap;   /* keep all in single row */
+  justify-content: right; /* center the whole filter bar */
+}
+
+.filter-bar select {
+  background-color: #d3d3d3;
+  border: none;
+  padding: 10px 30px 10px 15px; /* right padding increased for dropdown arrow */
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  appearance: none;
+
+  /* dropdown arrow */
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center; /* arrow stays inside box */
+  background-size: 16px 16px;
+
+  border-radius: 5px;
+  min-width: 140px;   /* ensures it fits in single row */
+  flex: 0 0 auto;     /* prevents shrinking */
+}
