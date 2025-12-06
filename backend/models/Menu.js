@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+// backend/models/Menu.js
+import mongoose from "mongoose";
 
 const menuItemSchema = new mongoose.Schema({
   name: String,
@@ -12,4 +13,4 @@ const menuSchema = new mongoose.Schema({
   items: [menuItemSchema],
 });
 
-module.exports = mongoose.model("Menu", menuSchema);
+export default mongoose.model("Menu", menuSchema);

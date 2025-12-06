@@ -1,3 +1,4 @@
+//components/ResturantCard.jsx
 import React from "react";
 import "./RestaurantCard.css";
 import { useNavigate } from "react-router-dom";

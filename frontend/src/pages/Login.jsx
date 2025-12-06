@@ -1,13 +1,17 @@
-//Login.jsx 
+//src/pages/Login.jsx 
 
 import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Login() {
+  const navigate = useNavigate(); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
 
   const handleLogin = async () => {
     try {
@@ -17,6 +21,7 @@ export default function Login() {
         { withCredentials: true }
       );
       alert("Login Successful 🎉");
+      navigate("/restaurants");
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");
     }
@@ -59,13 +64,13 @@ export default function Login() {
 
           <p className="text-center text-sm mb-2">
             Don’t have an account?{" "}
-            <Link to="/Register" className="text-blue-600 cursor-pointer">
+            <Link to="/register" className="text-blue-600 cursor-pointer">
               Register
             </Link>
           </p>
 
           <p className="text-center text-sm text-gray-700 cursor-pointer">
-            <Link to="/Forgot Password" className="text-blue-600 cursor-pointer">
+            <Link to="/forgot-password" className="text-blue-600 cursor-pointer">
               Forgot Password
             </Link>
           </p>

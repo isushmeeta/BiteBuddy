@@ -1,30 +1,20 @@
-const Restaurant = require("../models/Restaurant");
+//backend/controllers/restaurantControllers.js
+import Restaurant from "../models/Restaurant.js";
 
-exports.getRestaurants = async (req, res) => {
+export const getRestaurants = async (req, res) => {
   try {
     const { cuisine, rating, location } = req.query;
-
     let filter = {};
 
-    // Case-insensitive match for cuisine
-    if (cuisine) {
-      filter.cuisine = { $regex: new RegExp(`^${cuisine}$`, "i") };
-    }
-
-    // Rating greater than or equal
-    if (rating) {
-      filter.rating = { $gte: Number(rating) };
-    }
-
-    // Case-insensitive match for location
-    if (location) {
-      filter.location = { $regex: new RegExp(`^${location}$`, "i") };
-    }
+    if (cuisine) filter.cuisine = { $regex: new RegExp(`^${cuisine}$`, "i") };
+    if (rating) filter.rating = { $gte: Number(rating) };
+    if (location) filter.location = { $regex: new RegExp(`^${location}$`, "i") };
 
     const restaurants = await Restaurant.find(filter);
     res.json(restaurants);
-
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
   }
 };
+
