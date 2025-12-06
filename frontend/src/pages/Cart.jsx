@@ -1,4 +1,4 @@
-//Cart.jsx 
+//pages/Cart.jsx 
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import axios from "axios";

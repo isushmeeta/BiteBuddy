@@ -1,4 +1,4 @@
-//csrtRoutes.js
+//backend/routes/cartRoutes.js
 
 import express from "express";
 import { auth } from "../middleware/authMiddleware.js";

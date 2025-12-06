@@ -1,7 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const menuController = require("../controllers/menuController");
+// backend/routes/menuRoutes.js
+import express from "express";
+import menuController from "../controllers/menuControllers.js";
 
+const router = express.Router();
+
+// Get menu by restaurant ID
 router.get("/:restaurantId", menuController.getMenuByRestaurant);
 
-module.exports = router;
+export default router;

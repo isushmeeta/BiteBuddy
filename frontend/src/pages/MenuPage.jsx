@@ -1,16 +1,25 @@
+//src/pages/MenuPage.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 export default function MenuPage() {
+  const navigate = useNavigate(); 
   const { restaurantId } = useParams();
   const [menu, setMenu] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
 
+  const addToCart = (item) => {
+    setCartItems([...cartItems, item]);
+    navigate("/cart");
+  };
   useEffect(() => {
     const loadMenu = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:9169/api/menu/${restaurantId}`
+          `http://localhost:5000/api/menu/${restaurantId}`
         );
         setMenu(res.data.menu);
       } catch (err) {
@@ -32,8 +41,13 @@ export default function MenuPage() {
           <h2 className="font-semibold">{item.name}</h2>
           <p>{item.description}</p>
           <p className="font-bold">৳{item.price}</p>
+          <button 
+            className="mt-2 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800"
+            onClick={() => addToCart(item)} >
+              Add to Cart
+            </button>
         </div>
       ))}
     </div>
   );
-}
+};

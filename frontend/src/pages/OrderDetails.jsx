@@ -1,4 +1,4 @@
-
+//pages/OrderDetails.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -14,7 +14,7 @@ export default function OrderDetails() {
     const loadOrder = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:9169/api/orders/order/${orderId}`
+          `http://localhost:5000/api/orders/order/${orderId}`
         );
         console.log("ORDER LOADED:", res.data);
         setOrder(res.data);

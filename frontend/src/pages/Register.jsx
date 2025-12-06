@@ -1,7 +1,8 @@
-//Register.jsx 
+//src/pages/Register.jsx 
 
 import Navbar from "../components/Navbar";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function Register() {
@@ -11,12 +12,14 @@ export default function Register() {
   const [phone, setPhone] = useState("");
 
   const handleRegister = async () => {
+    const navigate = useNavigate();
     try {
       const res = await axios.post(
         "http://localhost:5000/api/auth/register",
         { name, email, password, phone }
       );
       alert("Account created successfully 🎉");
+      navigate("/login");
     } catch (err) {
       alert(err.response?.data?.msg || "Registration failed");
     }
