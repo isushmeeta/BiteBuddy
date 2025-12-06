@@ -2,11 +2,11 @@
 A full-stack food delivery platform for users, restaurants, and delivery partners built with MERN/Django &amp; React.
 
 ### Tech Stack
-## Frontend : React, JavaScript, TailwindCSS.
-## Backend : Node.js, Express.js, MongoDB
-## Authentication : JWT
+Frontend : React, JavaScript, TailwindCSS.
+Backend : Node.js, Express.js, MongoDB
+Authentication : JWT
 
-# BiteBuddy Project Setup Guide
+## BiteBuddy Project Setup Guide
 
 ### Clone the Repository
 
