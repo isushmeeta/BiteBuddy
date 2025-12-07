@@ -1,4 +1,4 @@
-//components/Navbar.jsx
+//src/components/Navbar.jsx
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 

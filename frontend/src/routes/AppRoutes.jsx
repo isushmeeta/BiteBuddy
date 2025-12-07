@@ -7,7 +7,7 @@ import Register from "../pages/Register";
 import Cart from "../pages/Cart";
 import MenuPage from "../pages/MenuPage";
 import Profile from "../pages/Profile";
-import ForgotPassword from "../pages/ForgotPassword";
+import ForgotPassword from "../pages/forgotPassword";
 import RestaurantListing from "../pages/RestaurantListing";
 
 export default function AppRoutes() {

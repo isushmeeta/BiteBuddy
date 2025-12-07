@@ -1,6 +1,6 @@
 //src/pages/MenuPage.jsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/axiosConfig";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
@@ -18,8 +18,8 @@ export default function MenuPage() {
   useEffect(() => {
     const loadMenu = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/menu/${restaurantId}`
+        const res = await api.get(
+          `/menu/${restaurantId}`
         );
         setMenu(res.data.menu);
       } catch (err) {

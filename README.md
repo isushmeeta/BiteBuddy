@@ -110,7 +110,7 @@ npm init -y
 
 npm install react-router-dom axios framer-motion lucide-react react-icons          # frontend
 
-npm install express mongoose cors cookie-parser bcryptjs jsonwebtoken              # backend
+npm install express mongoose cors cookie-parser bcryptjs dotenv jsonwebtoken uuid           # backend
 
 ```
 ##  Check you server runs on 
