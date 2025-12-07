@@ -11,8 +11,10 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
 
+  const navigate = useNavigate();
+
   const handleRegister = async () => {
-    const navigate = useNavigate();
+
     try {
       const res = await axios.post(
         "http://localhost:5000/api/auth/register",

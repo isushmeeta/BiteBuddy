@@ -2,7 +2,7 @@
 
 import express from "express";
 import { auth } from "../middleware/authMiddleware.js";
-import { getCart, updateQty, deleteItem } from "../controllers/cartController.js";
+import { getCart, updateQty, deleteItem } from "../controllers/cartControllers.js";
 
 const router = express.Router();
 

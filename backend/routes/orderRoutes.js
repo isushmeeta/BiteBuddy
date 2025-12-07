@@ -1,6 +1,6 @@
 // backend/routes/orderRoutes.js
 import express from "express";
-import orderController from "../controllers/orderControllers.js";
+import {createOrder,reorder, getUserOrders, getOrderById} from "../controllers/orderControllers.js";
 
 const router = express.Router();
 
@@ -8,15 +8,15 @@ const router = express.Router();
 router.get("/testuser", (req, res) => res.send("Router works"));
 
 // Create new order
-router.post("/", orderController.createOrder);
+router.post("/", createOrder);
 
 // Reorder
-router.post("/reorder/:orderId", orderController.reorder);
+router.post("/reorder/:orderId", reorder);
 
 // Get order details
-router.get("/order/:orderId", orderController.getOrderById);
+router.get("/order/:orderId", getOrderById);
 
 // Dynamic user orders route MUST be last
-router.get("/:userId", orderController.getUserOrders);
+router.get("/:userId", getUserOrders);
 
 export default router;

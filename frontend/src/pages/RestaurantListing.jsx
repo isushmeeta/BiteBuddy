@@ -1,4 +1,4 @@
-//pages/ResturantListing.jsx
+//src/pages/RestaurantListing.jsx
 import React, { useEffect, useState } from "react";
 import RestaurantCard from "../components/RestaurantCard";
 import FilterBar from "../components/FilterBar";
@@ -12,7 +12,7 @@ const RestaurantListing = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:9169/api/restaurants")
+    fetch("http://localhost:5000/api/restaurants")
       .then((res) => res.json())
       .then((data) => setRestaurants(data))
       .finally(() => setLoading(false));
