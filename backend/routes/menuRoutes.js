@@ -1,10 +1,17 @@
-// backend/routes/menuRoutes.js
 import express from "express";
-import{getMenuByRestaurant}  from "../controllers/menuControllers.js";
+import { auth } from "../middleware/authMiddleware.js";
+import {
+  getMenuByRestaurant,
+  addMenuItem,
+  updateMenuItem,
+  deleteMenuItem
+} from "../controllers/menuControllers.js";
 
 const router = express.Router();
 
-// Get menu by restaurant ID
 router.get("/:restaurantId", getMenuByRestaurant);
+router.post("/:restaurantId/item", addMenuItem);
+router.put("/:restaurantId/item/:itemId", updateMenuItem);
+router.delete("/:restaurantId/item/:itemId", deleteMenuItem);
 
 export default router;
