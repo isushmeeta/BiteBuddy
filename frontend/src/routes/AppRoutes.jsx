@@ -11,6 +11,10 @@ import ForgotPassword from "../pages/forgotPassword";
 import RestaurantListing from "../pages/RestaurantListing";
 import AdminMenuPage from "../pages/AdminMenuPage.jsx";
 import AdminDashboard from "../pages/AdminDashboard";
+import AdminRoute from "./AdminRoute";
+
+import OrderHistory from "../pages/OrderHistory";
+import OrderDetails from "../pages/OrderDetails";
 
 export default function AppRoutes() {
   return (
@@ -22,10 +26,20 @@ export default function AppRoutes() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/restaurants" element={<RestaurantListing />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/order-history" element={<OrderHistory />} />
+        <Route path="/orders/:orderId" element={<OrderDetails />} />
         <Route path="/menu/:restaurantId" element={<MenuPage />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/admin/:restaurantId" element={<AdminDashboard />} />
-        <Route path="/admin/menu/:restaurantId" element={<AdminMenuPage />} />
+        <Route path="/admin/:restaurantId" element={
+          <AdminRoute>
+            <AdminDashboard />
+          </AdminRoute>
+        } />
+        <Route path="/admin/menu/:restaurantId" element={
+          <AdminRoute>
+            <AdminMenuPage />
+          </AdminRoute>
+        } />
       </Routes>
     </BrowserRouter>
   );

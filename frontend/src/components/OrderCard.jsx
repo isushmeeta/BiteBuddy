@@ -8,10 +8,10 @@ const OrderCard = ({ order }) => {
 
   const dateText = order.orderDate
     ? new Date(order.orderDate).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
     : "";
 
   return (
@@ -28,9 +28,7 @@ const OrderCard = ({ order }) => {
         onClick={() => navigate(`/orders/${order._id}`)}
         className="bg-[#6b6363] text-white px-5 py-2 rounded-sm border-2 border-black hover:bg-[#5a5353]"
       >
-      <button
-        onClick={() => navigate(`/order-details/${order._id}`)}></button>
-        REORDER
+        VIEW ORDER
       </button>
     </div>
   );

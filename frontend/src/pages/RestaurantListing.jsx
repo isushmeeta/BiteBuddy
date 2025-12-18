@@ -72,7 +72,12 @@ const RestaurantListing = () => {
   const [cuisine, setCuisine] = useState("");
   const [rating, setRating] = useState("");
   const [location, setLocation] = useState("");
+
   const [loading, setLoading] = useState(true);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
 
   useEffect(() => {
     fetch("http://localhost:5000/api/restaurants")
@@ -81,13 +86,36 @@ const RestaurantListing = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [cuisine, rating, location]);
+
   const filteredRestaurants = restaurants.filter((r) => {
     return (
       (!cuisine || r.cuisine === cuisine) &&
       (!rating || r.rating >= parseFloat(rating)) &&
       (!location || r.location === location)
     );
+
   });
+
+  // Calculate current restaurants for pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentRestaurants = filteredRestaurants.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  const totalPages = Math.ceil(filteredRestaurants.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      setCurrentPage(pageNumber);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   if (loading)
     return <p className="text-center font-bold text-lg">Loading...</p>;
@@ -116,11 +144,42 @@ const RestaurantListing = () => {
             No restaurants found.
           </p>
         ) : (
-          filteredRestaurants.map((rest) => (
-            <RestaurantCard key={rest._id} restaurant={rest} />
+          currentRestaurants.map((rest, index) => (
+            <RestaurantCard key={rest._id || index} restaurant={rest} />
           ))
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {filteredRestaurants.length > itemsPerPage && (
+        <div className="flex justify-center items-center mt-10 space-x-4">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+            className={`px-4 py-2 rounded font-bold ${currentPage === 1
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-white text-black hover:bg-gray-200"
+              }`}
+          >
+            Previous
+          </button>
+
+          <span className="text-white font-bold text-lg">
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+            className={`px-4 py-2 rounded font-bold ${currentPage === totalPages
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-white text-black hover:bg-gray-200"
+              }`}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

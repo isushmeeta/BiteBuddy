@@ -8,10 +8,10 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Login() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
 
   const handleLogin = async () => {
     try {
@@ -21,6 +21,7 @@ export default function Login() {
         { withCredentials: true }
       );
       alert("Login Successful 🎉");
+      localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/restaurants");
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");

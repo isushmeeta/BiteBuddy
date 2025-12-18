@@ -1,4 +1,4 @@
-//backend/controllers/restaurantControllers.js
+// backend/controllers/restaurantControllers.js
 import Restaurant from "../models/Restaurant.js";
 
 export const getRestaurants = async (req, res) => {
@@ -18,3 +18,24 @@ export const getRestaurants = async (req, res) => {
   }
 };
 
+// ✅ MODULE 4 – View Restaurant Location
+export const getRestaurantLocation = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const restaurant = await Restaurant.findById(id);
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+
+    res.status(200).json({
+      name: restaurant.name,
+      latitude: restaurant.latitude,
+      longitude: restaurant.longitude,
+      location: restaurant.location,
+    });
+  } catch (error) {
+    console.error("Location error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

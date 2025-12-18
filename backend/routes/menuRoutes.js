@@ -6,12 +6,12 @@ import {
   updateMenuItem,
   deleteMenuItem
 } from "../controllers/menuControllers.js";
-
+import { protect,adminOnly } from "../middleware/adminMiddleware.js";
 const router = express.Router();
 
 router.get("/:restaurantId", getMenuByRestaurant);
-router.post("/:restaurantId/item", addMenuItem);
-router.put("/:restaurantId/item/:itemId", updateMenuItem);
-router.delete("/:restaurantId/item/:itemId", deleteMenuItem);
 
+router.post("/:restaurantId/item", protect, adminOnly, addMenuItem);
+router.put("/:restaurantId/item/:itemId", protect, adminOnly, updateMenuItem);
+router.delete("/:restaurantId/item/:itemId", protect, adminOnly, deleteMenuItem);
 export default router;

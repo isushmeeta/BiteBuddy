@@ -1,13 +1,4 @@
 
-
-// export default function AdminDashboard() {
-//   return (
-//     <div style={{ padding: "20px" }}>
-//       <h1>Admin Dashboard</h1>
-//       <p>This page loaded successfully.</p>
-//     </div>
-//   );
-// }
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -55,3 +46,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

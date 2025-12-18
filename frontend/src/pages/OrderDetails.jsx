@@ -14,7 +14,7 @@ export default function OrderDetails() {
     const loadOrder = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/orders/order/${orderId}`
+          `${import.meta.env.VITE_API_URL}/orders/order/${orderId}`
         );
         console.log("ORDER LOADED:", res.data);
         setOrder(res.data);
@@ -33,7 +33,7 @@ export default function OrderDetails() {
     try {
       setConfirming(true);
       const res = await axios.post(
-        `http://localhost:9169/api/orders/reorder/${order._id}`
+        `${import.meta.env.VITE_API_URL}/orders/reorder/${order._id}`
       );
       console.log("Reorder created:", res.data.order);
       alert("Order confirmed!");
@@ -50,7 +50,7 @@ export default function OrderDetails() {
 
   return (
     <div className="min-h-screen p-6"
-         style={{ backgroundColor: "#B197A4" }}>
+      style={{ backgroundColor: "#B197A4" }}>
       <div
         className="max-w-xl mx-auto p-6 rounded"
         style={{ backgroundColor: "#d3d3d3" }}   // ← Updated background color
@@ -76,9 +76,8 @@ export default function OrderDetails() {
         <button
           onClick={handleReorder}
           disabled={confirming}
-          className={`mt-4 px-6 py-2 rounded-md border-2 border-black text-white ${
-            confirming ? "bg-gray-500" : "bg-[#B197A4]"
-          }`}
+          className={`mt-4 px-6 py-2 rounded-md border-2 border-black text-white ${confirming ? "bg-gray-500" : "bg-[#B197A4]"
+            }`}
         >
           {confirming ? "Confirming..." : "REORDER"}
         </button>

@@ -25,16 +25,25 @@ export const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: "User not found" });
+    if (!user) {
+      console.log(`User not found for email: ${email}`);
+      return res.status(400).json({ msg: "User not found" });
+    }
 
+    console.log(`User found: ${user.email}, stored hash: ${user.password.substring(0, 10)}...`);
     const match = await bcrypt.compare(password, user.password);
-    if (!match) return res.status(400).json({ msg: "Wrong password" });
+    console.log(`Password match result: ${match}`);
+    if (!match) {
+      console.log(`Wrong password for user: ${email}`);
+      return res.status(400).json({ msg: "Wrong password" });
+    }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
     res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax" });
     res.json({ msg: "Login successful", user });
   } catch (err) {
+    console.error(`Login error: ${err.message}`);
     res.status(500).json({ msg: err.message });
   }
 };

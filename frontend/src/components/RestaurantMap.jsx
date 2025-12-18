@@ -1,0 +1,26 @@
+
+import React from "react";
+import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
+
+const containerStyle = {
+  width: "100%",
+  height: "350px",
+  marginTop: "10px",
+};
+
+const RestaurantMap = ({ latitude, longitude, name }) => {
+  const center = {
+    lat: latitude,
+    lng: longitude,
+  };
+
+  return (
+    <LoadScript googleMapsApiKey="AIzaSyDaQrJis6-4Vhrq_YbUjNrSXjFO1BlNBgc">
+      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
+        <Marker position={center} title={name} />
+      </GoogleMap>
+    </LoadScript>
+  );
+};
+
+export default RestaurantMap;
