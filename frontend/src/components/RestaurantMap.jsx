@@ -15,7 +15,7 @@ const RestaurantMap = ({ latitude, longitude, name }) => {
   };
 
   return (
-    <LoadScript googleMapsApiKey="AIzaSyDaQrJis6-4Vhrq_YbUjNrSXjFO1BlNBgc">
+    <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
         <Marker position={center} title={name} />
       </GoogleMap>

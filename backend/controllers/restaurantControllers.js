@@ -3,22 +3,35 @@ import Restaurant from "../models/Restaurant.js";
 
 export const getRestaurants = async (req, res) => {
   try {
-    const { cuisine, rating, location } = req.query;
+    const { cuisine, rating, location, page = 1, limit = 12 } = req.query;
     let filter = {};
 
     if (cuisine) filter.cuisine = { $regex: new RegExp(`^${cuisine}$`, "i") };
     if (rating) filter.rating = { $gte: Number(rating) };
     if (location) filter.location = { $regex: new RegExp(`^${location}$`, "i") };
 
-    const restaurants = await Restaurant.find(filter);
-    res.json(restaurants);
+    const pageNum = Number(page);
+    const limitNum = Number(limit);
+    const skip = (pageNum - 1) * limitNum;
+
+    const totalRestaurants = await Restaurant.countDocuments(filter);
+    const restaurants = await Restaurant.find(filter)
+      .skip(skip)
+      .limit(limitNum);
+
+    res.json({
+      restaurants,
+      totalRestaurants,
+      totalPages: Math.ceil(totalRestaurants / limitNum),
+      currentPage: pageNum,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: err.message });
   }
 };
 
-// ✅ MODULE 4 – View Restaurant Location
+//  MODULE 4 – View Restaurant Location
 export const getRestaurantLocation = async (req, res) => {
   try {
     const { id } = req.params;

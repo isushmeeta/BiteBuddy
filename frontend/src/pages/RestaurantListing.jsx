@@ -77,38 +77,41 @@ const RestaurantListing = () => {
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 12;
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/restaurants")
-      .then((res) => res.json())
-      .then((data) => setRestaurants(Array.isArray(data) ? data : [])) // prevents filter error
-      .finally(() => setLoading(false));
-  }, []);
+    const fetchRestaurants = async () => {
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams({
+          page: currentPage,
+          limit: itemsPerPage,
+          ...(cuisine && { cuisine }),
+          ...(rating && { rating }),
+          ...(location && { location }),
+        }).toString();
+
+        const res = await fetch(`http://localhost:5000/api/restaurants?${queryParams}`);
+        const data = await res.json();
+
+        setRestaurants(data.restaurants || []);
+        setTotalPages(data.totalPages || 1);
+      } catch (error) {
+        console.error("Failed to fetch restaurants:", error);
+        setRestaurants([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurants();
+  }, [cuisine, rating, location, currentPage]);
 
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [cuisine, rating, location]);
-
-  const filteredRestaurants = restaurants.filter((r) => {
-    return (
-      (!cuisine || r.cuisine === cuisine) &&
-      (!rating || r.rating >= parseFloat(rating)) &&
-      (!location || r.location === location)
-    );
-
-  });
-
-  // Calculate current restaurants for pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentRestaurants = filteredRestaurants.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
-
-  const totalPages = Math.ceil(filteredRestaurants.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
@@ -139,19 +142,19 @@ const RestaurantListing = () => {
       />
 
       <div className="restaurant-list">
-        {filteredRestaurants.length === 0 ? (
+        {restaurants.length === 0 ? (
           <p className="col-span-full text-center font-bold text-lg">
             No restaurants found.
           </p>
         ) : (
-          currentRestaurants.map((rest, index) => (
+          restaurants.map((rest, index) => (
             <RestaurantCard key={rest._id || index} restaurant={rest} />
           ))
         )}
       </div>
 
       {/* Pagination Controls */}
-      {filteredRestaurants.length > itemsPerPage && (
+      {totalPages > 1 && (
         <div className="flex justify-center items-center mt-10 space-x-4">
           <button
             disabled={currentPage === 1}
