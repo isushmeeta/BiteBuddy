@@ -1,5 +1,6 @@
 //backend/controllers/orderControllers.js
 import Order from "../models/Order.js";
+import Cart from "../models/Cart.js";
 import { v4 as uuidv4 } from "uuid";
 
 export const getUserOrders = async (req, res) => {
@@ -12,6 +13,14 @@ export const getUserOrders = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+const phoneRegex = /^01[0-9]{9}$/;
+
+if (!phone || !phoneRegex.test(phone)) {
+  return res.status(400).json({
+    msg: "Invalid phone number. Please enter a valid 11-digit number."
+  });
+}
+
 
 export const createOrder = async (req, res) => {
   try {
