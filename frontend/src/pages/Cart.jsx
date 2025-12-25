@@ -1,9 +1,12 @@
-//pages/Cart.jsx 
+//src//pages/Cart.jsx 
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import axios from "axios";
+import Navbar from "../components/Navbar";
+import api from "../config/axiosConfig";
 import { motion, AnimatePresence } from "framer-motion"; 
 import { Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Cart() {
   const [cart, setCart] = useState([]);
@@ -12,7 +15,7 @@ export default function Cart() {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/cart", {
+        const res = await api.get("/cart", {
           withCredentials: true,
         });
         setCart(res.data.items);
@@ -55,6 +58,7 @@ export default function Cart() {
   const deliveryCharge = 50;
   const subTotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   const total = subTotal + deliveryCharge;
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen bg-[#A98694]">
@@ -143,8 +147,10 @@ export default function Cart() {
           {/* Checkout Button */}
           <motion.button
             whileTap={{ scale: 0.95 }}
+            onClick={() => navigate("/checkout")}
             className="w-full mt-10 bg-[#49424F] text-white py-4 rounded-3xl text-2xl font-bold hover:bg-gray-800 transition"
           >
+
             Checkout
           </motion.button>
 

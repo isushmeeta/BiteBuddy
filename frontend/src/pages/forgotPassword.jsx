@@ -1,6 +1,6 @@
 //src//pages//forgotPassword.jsx
 import Navbar from "../components/Navbar";
-import axios from "axios";
+import api from "../config/axiosConfig";
 import { useState } from "react";
 
 export default function ForgotPassword() {
@@ -8,8 +8,8 @@ export default function ForgotPassword() {
 
   const handleReset = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/forgot-password",
+      const res = await api.post(
+        "/auth/forgot-password",
         { email }
       );
 

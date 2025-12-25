@@ -1,9 +1,10 @@
 //src/pages/Register.jsx 
 
 import Navbar from "../components/Navbar";
-import axios from "axios";
+import api from "../config/axiosConfig";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { validateEmail,validatePassword , validatePhone } from "../utils/validation";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -13,11 +14,19 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const emailError =validateEmail(email);
+    if (emailError) return alert(emailError);
 
+    const passError = validatePassword(password);
+    if (passError) return alert(passError);
+    
+    const phoneError = validatePhone(phone);
+    if (phoneError) return alert (phoneError);
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/register",
+      const res = await api.post(
+        "/auth/register",
         { name, email, password, phone }
       );
       alert("Account created successfully 🎉");
@@ -28,11 +37,11 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-[#A98694]">
+    <div className="min-h-screen bg-[#A98694] flex flex-col">
       <Navbar />
 
-      <div className="flex justify-center py-10">
-        <div className="w-[450px] p-8">
+      <div className="flex flex-1 justify-center items-center px-4">
+        <div className="bg-[#E3E1E1] w-[450px] p-8 rounded-2xl shadow-xl">
           <h2 className="text-center text-xl font-bold mb-6">
             Create Your Account
           </h2>

@@ -1,6 +1,6 @@
 // src/pages/OrderHistory.jsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/axiosConfig";
 import OrderCard from "../components/OrderCard";
 import "./OrderHistory.css";
 
@@ -13,7 +13,7 @@ export default function OrderHistory() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/orders/${userId}`);
+        const res = await axios.api(`/orders/${userId}`);
         setOrders(Array.isArray(res.data) ? res.data : res.data.orders || []);
       } catch (err) {
         console.error("Failed to fetch orders:", err);
@@ -27,17 +27,17 @@ export default function OrderHistory() {
 
   const handleReorder = async (order) => {
     try {
-      await axios.post(`http://localhost:5000/api/orders/reorder/${order._id}`);
+      await api.post(`/orders/reorder/${order._id}`);
       alert("Reorder placed (method 1).");
       return;
     } catch (e1) {
       try {
-        await axios.post(`http://localhost:5000/api/orders/${order._id}/reorder`);
+        await api.post(`/orders/${order._id}/reorder`);
         alert("Reorder placed (method 2).");
         return;
       } catch (e2) {
         try {
-          await axios.post(`http://localhost:5000/api/orders/reorder`, {
+          await api.post(`/orders/reorder`, {
             previousOrderId: order._id,
           });
           alert("Reorder placed (method 3).");

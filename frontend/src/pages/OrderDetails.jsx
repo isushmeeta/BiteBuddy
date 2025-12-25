@@ -1,6 +1,6 @@
 //pages/OrderDetails.jsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/axiosConfig";
 import { useParams } from "react-router-dom";
 
 export default function OrderDetails() {
@@ -13,8 +13,8 @@ export default function OrderDetails() {
   useEffect(() => {
     const loadOrder = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/api/orders/order/${orderId}`
+        const res = await api.get(
+          `/orders/order/${orderId}`
         );
         console.log("ORDER LOADED:", res.data);
         setOrder(res.data);
