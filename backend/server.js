@@ -34,6 +34,8 @@ app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/menu", menuRoutes);
 app.use("/api/orders", orderRoutes);
 
+
+
 // Root
 app.get("/", (req, res) => res.send("API Running"));
 

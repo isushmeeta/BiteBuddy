@@ -2,11 +2,44 @@
 
 import Cart from "../models/Cart.js";
 
+export const addToCart = async (req, res) => {
+  const { name, price, image, qty } = req.body;
+
+  let cart = await Cart.findOne({ userId: req.user.id });
+
+  if (!cart) {
+    cart = new Cart({
+      userId: req.user.id,
+      items: [],
+    });
+  }
+
+  const existingItem = cart.items.find(
+    (i) => i.name === name
+  );
+
+  if (existingItem) {
+    existingItem.qty += qty;
+  } else {
+    cart.items.push({
+      name,
+      price,
+      image,
+      qty,
+    });
+  }
+
+  await cart.save();
+  res.json(cart);
+};
+
+
 export const getCart = async (req, res) => {
   const cart = await Cart.findOne({ userId: req.user.id });
   if (!cart) return res.json({ items: [] });
-  res.json(cart);
+  res.json({ items: cart.items });
 };
+
 
 export const updateQty = async (req, res) => {
   const { qty } = req.body;

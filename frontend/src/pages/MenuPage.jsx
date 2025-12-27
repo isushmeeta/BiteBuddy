@@ -9,12 +9,28 @@ export default function MenuPage() {
   const navigate = useNavigate(); 
   const { restaurantId } = useParams();
   const [menu, setMenu] = useState(null);
-  const [cartItems, setCartItems] = useState([]);
+  
+  const addToCart = async (item) => {
+  try {
+    await api.post(
+      "/cart/add",
+      {
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        qty: 1,
+      },
+      { withCredentials: true }
+    );
 
-  const addToCart = (item) => {
-    setCartItems([...cartItems, item]);
     navigate("/cart");
-  };
+  } catch (err) {
+    console.log(err);
+    alert("Failed to add item");
+  }
+};
+
+
   useEffect(() => {
     const loadMenu = async () => {
       try {
