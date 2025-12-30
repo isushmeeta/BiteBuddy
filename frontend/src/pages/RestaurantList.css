@@ -1,9 +1,21 @@
 .restaurant-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(1, 1fr);
   gap: 20px;
   padding: 20px;
-  justify-items: center; /* Centers cards horizontally */
+  justify-items: center;
+}
+
+@media (min-width: 640px) {
+  .restaurant-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .restaurant-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .loading-text {
