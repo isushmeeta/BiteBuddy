@@ -25,7 +25,8 @@ app.use(cookieParser());
 const allowedOrigins = [
   process.env.CLIENT_URL,
   'http://localhost:5173',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'https://bitebuddy-gy8l.onrender.com'
 ].filter(Boolean);
 
 app.use(
