@@ -23,7 +23,7 @@ const RestaurantCard = ({ restaurant }) => {
       // Fetch only if location not already loaded
       if (!location) {
         const res = await axios.get(
-          `http://localhost:5000/api/restaurants/${restaurant._id}/location`
+          `${import.meta.env.VITE_API_URL}/restaurants/${restaurant._id}/location`
         );
         setLocation(res.data);
       }

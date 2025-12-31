@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import api from "../config/axiosConfig";
-import { motion, AnimatePresence } from "framer-motion"; 
+import { motion, AnimatePresence } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +32,7 @@ export default function Cart() {
 
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/cart/update/${id}`,
+        `${import.meta.env.VITE_API_URL}/cart/update/${id}`,
         { qty },
         { withCredentials: true }
       );
@@ -46,7 +46,7 @@ export default function Cart() {
   const deleteItem = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:5000/api/cart/delete/${id}`,
+        `${import.meta.env.VITE_API_URL}/cart/delete/${id}`,
         { withCredentials: true }
       );
       setCart(res.data.items);

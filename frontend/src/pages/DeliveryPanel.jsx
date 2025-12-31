@@ -14,14 +14,14 @@ export default function DeliveryPanel() {
 
   const fetchOrders = async () => {
     const res = await axios.get(
-      `http://localhost:5000/api/delivery/assigned/${deliveryPartnerId}`
+      `${import.meta.env.VITE_API_URL}/delivery/assigned/${deliveryPartnerId}`
     );
     setOrders(res.data);
   };
 
   const updateStatus = async (orderId, status) => {
     await axios.put(
-      `http://localhost:5000/api/delivery/update-status/${orderId}`,
+      `${import.meta.env.VITE_API_URL}/delivery/update-status/${orderId}`,
       { status }
     );
     fetchOrders();

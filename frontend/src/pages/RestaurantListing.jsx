@@ -91,7 +91,7 @@ const RestaurantListing = () => {
           ...(location && { location }),
         }).toString();
 
-        const res = await fetch(`http://localhost:5000/api/restaurants?${queryParams}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/restaurants?${queryParams}`);
         const data = await res.json();
 
         setRestaurants(data.restaurants || []);
