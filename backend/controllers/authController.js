@@ -47,3 +47,26 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ msg: err.message });
   }
 };
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { name, email, phone } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (phone) user.phone = phone;
+
+    await user.save();
+
+    res.json({ msg: "Profile updated successfully", user });
+  } catch (err) {
+    console.error("Update error:", err);
+    res.status(500).json({ msg: "Failed to update profile" });
+  }
+};

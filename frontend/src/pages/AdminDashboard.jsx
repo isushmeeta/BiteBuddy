@@ -1,11 +1,37 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import api from "../config/axiosConfig";
 
 export default function AdminDashboard() {
   const { restaurantId } = useParams();
   const navigate = useNavigate();
+  const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const res = await api.get("/restaurants");
+        setRestaurants(res.data.restaurants);
+      } catch (error) {
+        console.error("Failed to fetch restaurants:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRestaurants();
+  }, []);
+
+  const handleRestaurantChange = (e) => {
+    const newId = e.target.value;
+    if (newId) {
+      navigate(`/admin/${newId}`);
+    }
+  };
+
+  const currentRestaurant = restaurants.find(r => r._id === restaurantId);
 
   return (
     <div className="min-h-screen p-10" style={{ backgroundColor: "#B197A4" }}>
@@ -17,12 +43,32 @@ export default function AdminDashboard() {
 
       <div className="max-w-4xl mx-auto">
         <div className="bg-white/90 backdrop-blur-sm shadow-2xl p-8 rounded-2xl">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 pb-4 border-b-2 border-purple-200">
-            Restaurant Management
-            <span className="block text-sm font-normal text-gray-600 mt-2">
-              ID: {restaurantId}
-            </span>
-          </h2>
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b-2 border-purple-200">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">
+              Restaurant Management
+            </h2>
+
+            {/* Restaurant Selector */}
+            <div className="relative">
+              <select
+                value={restaurantId || ""}
+                onChange={handleRestaurantChange}
+                className="appearance-none bg-purple-50 border border-purple-200 text-gray-700 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-purple-500 font-semibold cursor-pointer min-w-[200px]"
+              >
+                <option value="" disabled>Select Restaurant</option>
+                {restaurants.map((r) => (
+                  <option key={r._id} value={r._id}>
+                    {r.name}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Manage Menu */}

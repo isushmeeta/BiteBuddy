@@ -6,22 +6,16 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Cart from "../pages/Cart";
 import MenuPage from "../pages/MenuPage";
-import UserProfile from "../pages/UserProfile";
+import Profile from "../pages/Profile";
 import ForgotPassword from "../pages/forgotPassword";
 import RestaurantListing from "../pages/RestaurantListing";
-<<<<<<< HEAD
 import Checkout from "../pages/Checkout";
 import OrderSuccess from "../pages/OrderSuccess";
 import OrderHistory from "../pages/OrderHistory";
-
-=======
 import AdminMenuPage from "../pages/AdminMenuPage.jsx";
 import AdminDashboard from "../pages/AdminDashboard";
 import AdminRoute from "./AdminRoute";
-
-import OrderHistory from "../pages/OrderHistory";
 import OrderDetails from "../pages/OrderDetails";
->>>>>>> sadia
 
 export default function AppRoutes() {
   return (
@@ -36,15 +30,8 @@ export default function AppRoutes() {
         <Route path="/order-history" element={<OrderHistory />} />
         <Route path="/orders/:orderId" element={<OrderDetails />} />
         <Route path="/menu/:restaurantId" element={<MenuPage />} />
-<<<<<<< HEAD
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-success/:orderId" element={<OrderSuccess />} />
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/order-history" element={<OrderHistory />} />
-        
-
-
-=======
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin/:restaurantId" element={
           <AdminRoute>
@@ -56,7 +43,6 @@ export default function AppRoutes() {
             <AdminMenuPage />
           </AdminRoute>
         } />
->>>>>>> sadia
       </Routes>
     </BrowserRouter>
   );

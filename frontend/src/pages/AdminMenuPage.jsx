@@ -9,6 +9,7 @@ export default function AdminMenuPage() {
   const navigate = useNavigate();
   const [menu, setMenu] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [restaurantName, setRestaurantName] = useState("");
 
   const [form, setForm] = useState({ name: "", price: "", description: "", image: "" });
   const [editingItemId, setEditingItemId] = useState(null);
@@ -16,12 +17,14 @@ export default function AdminMenuPage() {
   const loadMenu = async () => {
     try {
       const res = await api.get(`/menu/${restaurantId}`);
-      console.log("Menu loaded successfully:", res.data.menu);
-      console.log("Menu items:", res.data.menu.items);
       setMenu(res.data.menu);
-      console.log("Menu state updated");
+
+      // Fetch restaurant details for name
+      const resRest = await api.get(`/restaurants/${restaurantId}/location`);
+      setRestaurantName(resRest.data.name);
+
     } catch (err) {
-      alert("Failed to load menu!");
+      alert("Failed to load data!");
       console.error(err);
     } finally {
       setLoading(false);
@@ -128,9 +131,18 @@ export default function AdminMenuPage() {
       <Navbar />
 
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-left text-5xl md:text-6xl font-extrabold text-gradient bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent tracking-wide pl-6 md:pl-20">
-          MENU MANAGEMENT
-        </h1>
+        <div className="flex flex-col">
+          <h1 className="text-left text-5xl md:text-6xl font-extrabold text-gradient bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent tracking-wide pl-6 md:pl-20">
+            MENU MANAGEMENT
+          </h1>
+          {restaurantName && (
+            <div className="pl-6 md:pl-20 mt-3">
+              <span className="inline-block px-5 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-lg font-bold shadow-sm tracking-wide">
+                for {restaurantName}
+              </span>
+            </div>
+          )}
+        </div>
         <button
           onClick={() => navigate(`/admin/${restaurantId}`)}
           className="mr-6 md:mr-20 px-6 py-3 bg-white/90 backdrop-blur-sm text-gray-800 font-bold rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300"

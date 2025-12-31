@@ -13,17 +13,17 @@ export const getUserOrders = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
-const phoneRegex = /^01[0-9]{9}$/;
-
-if (!phone || !phoneRegex.test(phone)) {
-  return res.status(400).json({
-    msg: "Invalid phone number. Please enter a valid 11-digit number."
-  });
-}
-
-
 export const createOrder = async (req, res) => {
   try {
+    const { phone } = req.body;
+    const phoneRegex = /^01[0-9]{9}$/;
+
+    if (!phone || !phoneRegex.test(phone)) {
+      return res.status(400).json({
+        msg: "Invalid phone number. Please enter a valid 11-digit number."
+      });
+    }
+
     const order = new Order(req.body);
     await order.save();
     res.json({ success: true, order });

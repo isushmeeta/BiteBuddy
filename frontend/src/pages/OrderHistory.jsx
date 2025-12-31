@@ -2,18 +2,12 @@
 import React, { useEffect, useState } from "react";
 import api from "../config/axiosConfig";
 import OrderCard from "../components/OrderCard";
-<<<<<<< HEAD
-=======
 import Navbar from "../components/Navbar";
->>>>>>> sadia
 
 export default function OrderHistory() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-<<<<<<< HEAD
-  const userId = "USER001"; // replace with real user later
-=======
   // Get logged-in user from localStorage
   const getLoggedInUserId = () => {
     try {
@@ -26,13 +20,12 @@ export default function OrderHistory() {
   };
 
   const userId = getLoggedInUserId();
->>>>>>> sadia
 
   useEffect(() => {
     const fetchOrders = async () => {
       // Check if user is logged in
       if (!userId) {
-        alert("Please log in to view your order history");
+        // Optional: redirect to login or just show empty state
         setLoading(false);
         return;
       }
@@ -53,53 +46,12 @@ export default function OrderHistory() {
 
   const handleReorder = async (order) => {
     try {
-<<<<<<< HEAD
       await api.post(`/orders/reorder/${order._id}`);
-      alert("Reorder placed successfully");
+      alert("Reorder placed successfully!");
     } catch (err) {
       console.error("Reorder failed:", err);
-      alert("Reorder failed");
-    }
-  };
-
-  return (
-    <div
-      style={{
-        backgroundColor: "#B197A4",
-        minHeight: "100vh",
-        padding: "20px",
-      }}
-    >
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6">ORDER HISTORY</h1>
-
-        {loading ? (
-          <p>Loading orders...</p>
-        ) : orders.length === 0 ? (
-          <p>No orders found.</p>
-        ) : (
-          <div className="grid gap-4">
-=======
-      await axios.post(`http://localhost:5000/api/orders/reorder/${order._id}`);
-      alert("Reorder placed successfully!");
-      return;
-    } catch (e1) {
-      try {
-        await axios.post(`http://localhost:5000/api/orders/${order._id}/reorder`);
-        alert("Reorder placed successfully!");
-        return;
-      } catch (e2) {
-        try {
-          await axios.post(`http://localhost:5000/api/orders/reorder`, {
-            previousOrderId: order._id,
-          });
-          alert("Reorder placed successfully!");
-          return;
-        } catch (e3) {
-          console.error("Reorder failed:", e1, e2, e3);
-          alert("Reorder failed. Please try again.");
-        }
-      }
+      // Fallback or detailed error handling could go here
+      alert("Reorder failed. Please try again.");
     }
   };
 
@@ -129,7 +81,6 @@ export default function OrderHistory() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
->>>>>>> sadia
             {orders.map((order) => (
               <OrderCard
                 key={order._id}

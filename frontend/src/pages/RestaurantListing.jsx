@@ -65,7 +65,6 @@ import React, { useEffect, useState } from "react";
 import RestaurantCard from "../components/RestaurantCard";
 import FilterBar from "../components/FilterBar";
 import Navbar from "../components/Navbar";   // ✅ IMPORT NAVBAR
-import "./RestaurantList.css";
 
 const RestaurantListing = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -78,7 +77,7 @@ const RestaurantListing = () => {
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 12;
+  const itemsPerPage = 8; // Adjust to 8 for cleaner 4-col rows
 
   useEffect(() => {
     const fetchRestaurants = async () => {
@@ -121,68 +120,78 @@ const RestaurantListing = () => {
   };
 
   if (loading)
-    return <p className="text-center font-bold text-lg">Loading...</p>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#B197A4]">
+        <p className="text-3xl font-extrabold text-white animate-pulse">Loading Deliciousness...</p>
+      </div>
+    );
 
   return (
-    <div className="min-h-screen p-10" style={{ backgroundColor: "#B197A4" }}>
-      <Navbar /> {/* ✅ NAVBAR SHOWS ON THIS PAGE */}
+    <div className="min-h-screen bg-[#B197A4] pb-20">
+      <Navbar />
 
-      <h1 className="text-left text-5xl md:text-6xl font-extrabold mb-8 text-gradient bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent tracking-wide pl-6 md:pl-20">
-        RESTAURANT LISTING
-      </h1>
+      <div className="max-w-7xl mx-auto px-6">
+        <h1 className="text-left text-5xl md:text-6xl font-extrabold mt-10 mb-8 text-gradient bg-gradient-to-r from-purple-800 via-pink-600 to-yellow-500 bg-clip-text text-transparent tracking-tight">
+          RESTAURANT LISTING
+        </h1>
 
-      <FilterBar
-        dataset={restaurants}
-        cuisine={cuisine}
-        setCuisine={setCuisine}
-        rating={rating}
-        setRating={setRating}
-        location={location}
-        setLocation={setLocation}
-      />
+        <FilterBar
+          dataset={restaurants}
+          cuisine={cuisine}
+          setCuisine={setCuisine}
+          rating={rating}
+          setRating={setRating}
+          location={location}
+          setLocation={setLocation}
+        />
 
-      <div className="restaurant-list">
         {restaurants.length === 0 ? (
-          <p className="col-span-full text-center font-bold text-lg">
-            No restaurants found.
-          </p>
+          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-20 text-center border border-white/20">
+            <p className="text-2xl font-bold text-white/80">
+              No restaurants match your filters. Try something else! 🍕
+            </p>
+          </div>
         ) : (
-          restaurants.map((rest, index) => (
-            <RestaurantCard key={rest._id || index} restaurant={rest} />
-          ))
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 items-start">
+            {restaurants.map((rest, index) => (
+              <RestaurantCard key={rest._id || index} restaurant={rest} />
+            ))}
+          </div>
+        )}
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center mt-16 space-x-6">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+              className={`px-8 py-3 rounded-2xl font-bold shadow-xl transition-all duration-300 ${currentPage === 1
+                ? "bg-white/10 text-white/30 cursor-not-allowed"
+                : "bg-white text-purple-700 hover:bg-purple-600 hover:text-white transform hover:scale-105"
+                }`}
+            >
+              ← Previous
+            </button>
+
+            <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/30 shadow-inner">
+              <span className="text-white font-bold text-lg">
+                Page {currentPage} of {totalPages}
+              </span>
+            </div>
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+              className={`px-8 py-3 rounded-2xl font-bold shadow-xl transition-all duration-300 ${currentPage === totalPages
+                ? "bg-white/10 text-white/30 cursor-not-allowed"
+                : "bg-white text-purple-700 hover:bg-purple-600 hover:text-white transform hover:scale-105"
+                }`}
+            >
+              Next →
+            </button>
+          </div>
         )}
       </div>
-
-      {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <div className="flex justify-center items-center mt-10 space-x-4">
-          <button
-            disabled={currentPage === 1}
-            onClick={() => handlePageChange(currentPage - 1)}
-            className={`px-4 py-2 rounded font-bold ${currentPage === 1
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-white text-black hover:bg-gray-200"
-              }`}
-          >
-            Previous
-          </button>
-
-          <span className="text-white font-bold text-lg">
-            Page {currentPage} of {totalPages}
-          </span>
-
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() => handlePageChange(currentPage + 1)}
-            className={`px-4 py-2 rounded font-bold ${currentPage === totalPages
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-white text-black hover:bg-gray-200"
-              }`}
-          >
-            Next
-          </button>
-        </div>
-      )}
     </div>
   );
 };

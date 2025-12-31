@@ -1,13 +1,7 @@
-//pages/OrderDetails.jsx
 import React, { useEffect, useState } from "react";
-<<<<<<< HEAD
-import api from "../config/axiosConfig";
-import { useParams } from "react-router-dom";
-=======
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
->>>>>>> sadia
 
 export default function OrderDetails() {
   const { orderId } = useParams();
@@ -20,13 +14,8 @@ export default function OrderDetails() {
   useEffect(() => {
     const loadOrder = async () => {
       try {
-<<<<<<< HEAD
-        const res = await api.get(
-          `/orders/order/${orderId}`
-=======
         const res = await axios.get(
           `${import.meta.env.VITE_API_URL}/orders/order/${orderId}`
->>>>>>> sadia
         );
         console.log("ORDER LOADED:", res.data);
         setOrder(res.data);
@@ -159,8 +148,8 @@ export default function OrderDetails() {
                 onClick={handleReorder}
                 disabled={confirming}
                 className={`flex-1 py-4 font-bold rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 ${confirming
-                    ? "bg-gray-400 text-gray-700 cursor-not-allowed"
-                    : "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                  ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                  : "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
                   }`}
               >
                 {confirming ? (
