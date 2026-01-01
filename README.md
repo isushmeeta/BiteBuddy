@@ -1,214 +1,147 @@
-# BiteBuddy
-A full-stack food delivery platform for users, restaurants, and delivery partners built with MERN/Django &amp; React.
 
-### Tech Stack
-Frontend : React, JavaScript, TailwindCSS.
-Backend : Node.js, Express.js, MongoDB
-Authentication : JWT
+# 🍔 BiteBuddy - Food Delivery Platform
 
-## BiteBuddy Project Setup Guide
+**BiteBuddy** is a modern, full-stack food delivery application built with the **MERN Stack** (MongoDB, Express, React, Node.js). It connects users with local restaurants and delivery partners, offering a seamless ordering experience with real-time updates.
 
-### Clone the Repository
+---
 
-First, clone the BiteBuddy repository to your local machine:
+## ✨ Features
 
+### 👤 User
+*   **Authentication**: Secure Login & Registration (JWT-based).
+*   **Listing**: Browse restaurants with advanced filters (Cuisine, Rating, Location).
+*   **Menu**: View dynamic menus with engaging UI.
+*   **Cart**: Add/remove items with a specialized cart management system.
+*   **Checkout**:
+    *   **Payment Simulation**: Integrated "Pay Online" simulation for Bkash, Nagad, and Rocket with validation.
+    *   **Validation**: Strict input checks for phone numbers and PINs.
+*   **Order History**: Track past orders and status.
+
+### 👨‍🍳 Admin
+*   **Dashboard**: Overview of all platform activities.
+*   **Order Management**: View, Cancel, or Delete orders.
+*   **Restaurant Management**: (Future feature) Manage listings and menus.
+
+### 🚚 Delivery Partner
+*   **Dashboard**: View assigned deliveries ("My Deliveries").
+*   **Status Updates**: Update order status (Picked Up, Delivered).
+*   **History**: View completed deliveries.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+*   **Framework**: React (Vite)
+*   **Styling**: TailwindCSS, Vanilla CSS (Glassmorphism design)
+*   **Icons**: Lucide React, React Icons
+*   **State/Routing**: React Router DOM, Context API
+*   **HTTP Client**: Axios
+
+### Backend
+*   **Runtime**: Node.js
+*   **Framework**: Express.js
+*   **Database**: MongoDB (Mongoose ODM)
+*   **Auth**: JSON Web Token (JWT), BcryptJS
+
+---
+
+## 🚀 Getting Started
+
+Follow these steps to run BiteBuddy locally.
+
+### 1️⃣ Clone the Repository
 ```bash
 git clone https://github.com/isushmeeta/BiteBuddy.git
 cd BiteBuddy
 ```
 
-## 2️⃣ Frontend Setup
-
-Navigate to the frontend folder:
-
+### 2️⃣ Backend Setup
+Navigate to the backend directory and install dependencies.
 ```bash
-cd frontend
-```
-
-### 2.1 Install Dependencies
-
-```bash
+cd backend
 npm install
 ```
 
-### 2.2 Install Extra Dependencies (if needed)
-
-```bash
-npm install react-router-dom axios react-icons
-```
-
-### 2.3 TailwindCSS (if not already configured)
-
-```bash
-npx tailwindcss init -p
-```
-
-### 2.4 Create `.env` file
-
-Inside `frontend/`, create `.env`:
-
-```
-VITE_API_URL=http://localhost:5000/api
-```
-
-### 2.5 Start Frontend Server
-
-```bash
-npm run dev
-```
-
-**Access frontend:** [http://localhost:5173](http://localhost:5173)
-
----
-
-## 3️⃣ Backend Setup
-
-Navigate to the backend folder:
-
-```bash
-cd ../backend
-```
-
-### 3.1 Install Dependencies
-
-```bash
-npm install
-```
-
-### 3.2 Create `.env` file
-
-```
+**Configure Environment Variables:**
+Create a `.env` file in the `backend/` folder:
+```env
 PORT=5000
-MONGO_URI=<your-mongodb-uri>
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_super_secret_key
 CLIENT_URL=http://localhost:5173
-JWT_SECRET=<any-secret-key>
 ```
 
-### 3.3 Start Backend Server
-
+**Start the Server:**
 ```bash
 npm run dev
+# Server runs on http://localhost:5000
 ```
 
-**Access backend:** [http://localhost:5000](http://localhost:5000)
+### 3️⃣ Frontend Setup
+Navigate to the frontend directory and install dependencies.
+```bash
+cd ../frontend
+npm install
+```
+
+**Configure Environment Variables:**
+Create a `.env` file in the `frontend/` folder:
+```env
+VITE_API_URL=http://localhost:5000/api
+VITE_GOOGLE_MAPS_API_KEY=your_google_maps_key #(Optional)
+```
+
+**Start the Client:**
+```bash
+npm run dev
+# App runs on http://localhost:5173
+```
 
 ---
 
-## 4️⃣ Verify Setup
+## 📁 Project Structure
 
-* Frontend should run on **[http://localhost:5173](http://localhost:5173)**
-* Backend should run on **[http://localhost:5000](http://localhost:5000)**
-* Test API endpoints or frontend pages to ensure they are working
-
----
-
-
-
-## Install Dependencies(shortcuts)
-```bash 
-npm init -y
-
-npm install react-router-dom axios framer-motion lucide-react react-icons          # frontend
-
-npm install express mongoose cors cookie-parser bcryptjs dotenv jsonwebtoken uuid           # backend
-
-```
-##  Check you server runs on 
-```bash 
-http://localhost:5000
-```
-
-### Folder Sturcture 
 ```bash
 BiteBuddy/
 │
-├── frontend/
-│   ├── public/
-│   └── src/
-│       ├── assets/
-│       │   ├── images/
-│       │   └── icons/
-│       │
-│       ├── components/
-│       │   ├── common/
-│       │   ├── layout/
-│       │   └── cart/
-│       │
-│       ├── pages/
-│       │   ├── Home/
-│       │   ├── Menu/
-│       │   ├── Cart/
-│       │   ├── Login/
-│       │   ├── Register/
-│       │   ├── Profile/
-│       │   └── Orders/
-│       │
-│       ├── routes/
-│       │   └── AppRoutes.jsx
-│       │
-│       ├── api/
-│       │   ├── auth.js
-│       │   ├── cart.js
-│       │   ├── orders.js
-│       │   └── user.js
-│       │
-│       ├── context/
-│       │   ├── AuthContext.jsx
-│       │   ├── CartContext.jsx
-│       │   └── UserContext.jsx
-│       │
-│       ├── hooks/
-│       │   ├── useAuth.js
-│       │   ├── useCart.js
-│       │   └── useFetch.js
-│       │
-│       ├── utils/
-│       │   ├── formatPrice.js
-│       │   ├── validators.js
-│       │   └── constants.js
-│       │
-│       ├── config/
-│       │   └── axiosConfig.js
-│       │
-│       ├── App.jsx
-│       ├── main.jsx
-│       └── index.css
+├── frontend/          # React + Vite Application
+│   ├── src/
+│       ├── components/ # Reusable UI components
+│       ├── pages/      # Full page views (Dashboard, Menu, Login)
+│       ├── context/    # Global State (Auth, Cart)
+│       ├── hooks/      # Custom Hooks
+│       └── ...
 │
-│
-├── backend/
-│   ├── config/
-│   │   ├── db.js
-│   │   └── env.js
-│   │
-│   ├── controllers/
-│   │   ├── authController.js
-│   │   ├── cartController.js
-│   │   ├── orderController.js
-│   │   └── userController.js
-│   │
-│   ├── models/
-│   │   ├── User.js
-│   │   ├── Cart.js
-│   │   ├── Order.js
-│   │   └── FoodItem.js
-│   │
-│   ├── routes/
-│   │   ├── authRoutes.js
-│   │   ├── cartRoutes.js
-│   │   ├── orderRoutes.js
-│   │   └── userRoutes.js
-│   │
-│   ├── middleware/
-│   │   ├── authMiddleware.js
-│   │   └── errorHandler.js
-│   │
-│   ├── utils/
-│   │   ├── generateToken.js
-│   │   └── response.js
-│   │
-│   ├── server.js
-│   └── package.json
-│
-└── README.md
+└── backend/           # Node.js + Express API
+    ├── controllers/   # Business logic
+    ├── models/        # Mongoose Schemas (User, Order, etc.)
+    ├── routes/        # API Endpoints
+    └── ...
 ```
 
+---
+
+## ☁️ Deployment
+
+*   **Frontend**: Recommended on [Vercel](https://vercel.com).
+*   **Backend**: Recommended on [Render](https://render.com).
+*   **Database**: [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+
+See [`deployment_guide.md`](./deployment_guide.md) for detailed instructions.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+1.  Fork the repo.
+2.  Create a feature branch (`git checkout -b feature/amazing-feature`).
+3.  Commit your changes.
+4.  Push to the branch.
+5.  Open a Pull Request.
+
+---
+
+## 📄 License
+This project is licensed under the MIT License.
