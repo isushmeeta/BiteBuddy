@@ -1,3 +1,4 @@
+
 //src/pages/Checkout.jsx/
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -20,6 +21,8 @@ export default function Checkout() {
 
   // Pay Online State
   const [onlineProvider, setOnlineProvider] = useState(""); // 'Bkash', 'Nagad', 'Rocket'
+  const [mobileDetails, setMobileDetails] = useState({ number: "", pin: "" });
+
 
   // Card Payment State
   const [cardDetails, setCardDetails] = useState({
@@ -46,9 +49,19 @@ export default function Checkout() {
     }
 
     // Payment Validation
-    if (paymentMethod === "Pay Online" && !onlineProvider) {
-      toast.error("Please select a mobile wallet (Bkash, Nagad, or Rocket)");
-      return;
+    if (paymentMethod === "Pay Online") {
+      if (!onlineProvider) {
+        toast.error("Please select a mobile wallet (Bkash, Nagad, or Rocket)");
+        return;
+      }
+      if (!mobileDetails.number || mobileDetails.number.length !== 11) {
+        toast.error(`Please enter a valid 11-digit ${onlineProvider} number`);
+        return;
+      }
+      if (!mobileDetails.pin || mobileDetails.pin.length !== 5) {
+        toast.error("Please enter a valid 5-digit PIN");
+        return;
+      }
     }
 
     if (paymentMethod === "Card Payment") {
@@ -63,6 +76,18 @@ export default function Checkout() {
     setLoading(true);
 
     try {
+      // Payment Gateway Simulation
+      if (paymentMethod === "Pay Online") {
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate initial handshake
+        toast.loading(`Redirecting to ${onlineProvider} Gateway... 🔐`, { duration: 1500 });
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate redirec
+        toast.dismiss();
+        toast.loading("Processing Payment... 💸", { duration: 2000 });
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate transaction
+        toast.dismiss();
+        toast.success("Payment Received! ✅");
+      }
+
       const paymentData = {
         method: paymentMethod,
         provider: paymentMethod === "Pay Online" ? onlineProvider : null,
@@ -206,6 +231,50 @@ export default function Checkout() {
                           </div>
                         ))}
                       </div>
+
+                      {/* Dynamic Inputs for Mobile Banking - STYLED SAME AS CARD */}
+                      <AnimatePresence>
+                        {onlineProvider && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="bg-gray-50 p-4 rounded-xl border border-gray-200 mt-4 space-y-3"
+                          >
+                            <div className="flex items-center gap-2 text-sm font-bold text-gray-600 mb-1">
+                              <Wallet size={16} /> Enter {onlineProvider} Information
+                            </div>
+
+                            <input
+                              type="tel"
+                              maxLength={11}
+                              placeholder="Enter valid 11-digit Phone Number"
+                              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none bg-white font-medium"
+                              value={mobileDetails.number}
+                              onChange={(e) => {
+                                const val = e.target.value.replace(/\D/g, ''); // Only allow numbers
+                                setMobileDetails({ ...mobileDetails, number: val })
+                              }}
+                            />
+
+                            <input
+                              type="password"
+                              maxLength={5}
+                              placeholder="Enter 5-digit PIN"
+                              className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none bg-white font-medium"
+                              value={mobileDetails.pin}
+                              onChange={(e) => {
+                                const val = e.target.value.replace(/\D/g, ''); // Only allow numbers
+                                setMobileDetails({ ...mobileDetails, pin: val })
+                              }}
+                            />
+
+                            <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                              🔒 Secured by {onlineProvider} Gateway
+                            </p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </motion.div>
                   )}
 
@@ -259,15 +328,17 @@ export default function Checkout() {
             <button
               onClick={placeOrder}
               disabled={loading}
-              className="flex-[2] bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+              className={`flex-[2] text-white font-bold py-4 rounded-xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2
+                ${paymentMethod === 'Pay Online' ? 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 shadow-pink-500/30' : 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/30'}
+                `}
             >
               {loading ? (
                 <>
                   <Loader2 size={20} className="animate-spin" />
-                  Processing...
+                  {paymentMethod === 'Pay Online' ? 'Connecting...' : 'Processing...'}
                 </>
               ) : (
-                "Place Order"
+                paymentMethod === 'Pay Online' ? 'Proceed to Payment 🔒' : 'Place Order'
               )}
             </button>
           </div>
