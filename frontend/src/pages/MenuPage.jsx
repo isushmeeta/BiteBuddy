@@ -13,6 +13,12 @@ export default function MenuPage() {
   const [loading, setLoading] = useState(true);
 
   const addToCart = async (item) => {
+    if (!localStorage.getItem("token")) {
+      toast.error("Please login to order! 🔒");
+      setTimeout(() => navigate("/login"), 1000);
+      return;
+    }
+
     try {
       await api.post("/cart/add", {
         name: item.name,

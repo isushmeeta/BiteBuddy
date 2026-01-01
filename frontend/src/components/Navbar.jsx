@@ -16,26 +16,40 @@ export default function Navbar() {
       </Link>
 
       {/* Actions: Cart & Profile */}
+      {/* Actions: Cart & Profile */}
       <div className="flex items-center gap-6">
-        <Link to="/cart" className="relative group">
-          <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-all text-white">
-            <ShoppingCart size={24} />
-          </div>
-        </Link>
+        {localStorage.getItem("token") ? (
+          <>
+            <Link to="/cart" className="relative group">
+              <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-all text-white">
+                <ShoppingCart size={24} />
+              </div>
+            </Link>
 
-        <Link to="/profile" className="flex items-center gap-2 text-white hover:text-indigo-100 transition-colors">
-          <UserCircle size={32} strokeWidth={1.5} />
-        </Link>
-        <button
-          onClick={() => {
-            localStorage.removeItem("user");
-            localStorage.removeItem("token");
-            window.location.href = "/login";
-          }}
-          className="text-white hover:text-red-300 font-bold ml-2"
-        >
-          Logout
-        </button>
+            <Link to="/profile" className="flex items-center gap-2 text-white hover:text-indigo-100 transition-colors">
+              <UserCircle size={32} strokeWidth={1.5} />
+            </Link>
+            <button
+              onClick={() => {
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+                window.location.href = "/login";
+              }}
+              className="text-white hover:text-red-300 font-bold ml-2"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <div className="flex gap-4">
+            <Link to="/login" className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl transition-all border border-white/20 backdrop-blur-sm">
+              Login
+            </Link>
+            <Link to="/register" className="px-5 py-2 bg-white text-indigo-600 font-bold rounded-xl hover:bg-gray-100 transition-all shadow-lg">
+              Register
+            </Link>
+          </div>
+        )}
       </div>
 
     </nav>
