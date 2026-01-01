@@ -32,14 +32,19 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
+      // Log origin for debugging (helps when deployed to Vercel/Render)
+      console.log("CORS origin:", origin);
       // Allow requests with no origin (mobile apps, curl, Postman, etc.)
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
-      return callback(new Error('Not allowed by CORS'));
+      // Signal disallowed origin without throwing an Error so CORS middleware
+      // can respond to preflight requests cleanly (avoids 500 with no CORS headers)
+      return callback(null, false);
     },
     credentials: true,
+    optionsSuccessStatus: 200,
   })
 );
 

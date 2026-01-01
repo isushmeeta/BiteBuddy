@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../config/axiosConfig";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
@@ -14,9 +14,7 @@ export default function OrderDetails() {
   useEffect(() => {
     const loadOrder = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/orders/order/${orderId}`
-        );
+        const res = await api.get(`/orders/order/${orderId}`);
         console.log("ORDER LOADED:", res.data);
         setOrder(res.data);
       } catch (err) {
@@ -33,9 +31,7 @@ export default function OrderDetails() {
   const handleReorder = async () => {
     try {
       setConfirming(true);
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/orders/reorder/${order._id}`
-      );
+      const res = await api.post(`/orders/reorder/${order._id}`);
       console.log("Reorder created:", res.data.order);
       alert("Order placed successfully!");
     } catch (err) {

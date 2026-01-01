@@ -39,8 +39,13 @@ export const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const isProd = process.env.NODE_ENV === "production";
 
-    res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax" });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax"
+    });
     res.json({ msg: "Login successful", user });
   } catch (err) {
     console.error(`Login error: ${err.message}`);

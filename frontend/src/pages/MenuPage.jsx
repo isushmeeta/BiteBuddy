@@ -11,21 +11,17 @@ export default function MenuPage() {
 
   const addToCart = async (item) => {
     try {
-      await api.post(
-        "/cart/add",
-        {
-          name: item.name,
-          price: item.price,
-          image: item.image,
-          qty: 1,
-        },
-        { withCredentials: true }
-      );
+      await api.post("/cart/add", {
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        qty: 1,
+      });
 
       navigate("/cart");
     } catch (err) {
-      console.log(err);
-      alert("Failed to add item");
+      console.error("Add to cart failed:", err);
+      alert("Failed to add item to cart. Please make sure you are logged in.");
     }
   };
 
