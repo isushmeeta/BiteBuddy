@@ -1,70 +1,10 @@
-// //src/pages/RestaurantListing.jsx
-// import React, { useEffect, useState } from "react";
-// import RestaurantCard from "../components/RestaurantCard";
-// import FilterBar from "../components/FilterBar";
-// import "./RestaurantList.css";
 
-// const RestaurantListing = () => {
-//   const [restaurants, setRestaurants] = useState([]);
-//   const [cuisine, setCuisine] = useState("");
-//   const [rating, setRating] = useState("");
-//   const [location, setLocation] = useState("");
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     fetch("http://localhost:5000/api/restaurants")
-//       .then((res) => res.json())
-//       .then((data) => setRestaurants(data))
-//       .finally(() => setLoading(false));
-//   }, []);
-
-//   const filteredRestaurants = restaurants.filter((r) => {
-//     return (
-//       (!cuisine || r.cuisine === cuisine) &&
-//       (!rating || r.rating >= parseFloat(rating)) &&
-//       (!location || r.location === location)
-//     );
-//   });
-
-//   if (loading) return <p className="text-center font-bold text-lg">Loading...</p>;
-
-//   return (
-//     <div className="min-h-screen p-10" style={{ backgroundColor: "#B197A4" }}>
-//       <h1 className="text-left text-5xl md:text-6xl font-extrabold mb-8 text-gradient bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent tracking-wide pl-6 md:pl-20">
-//         RESTAURANT LISTING
-//       </h1>
-
-//       <FilterBar
-//         dataset={restaurants}
-//         cuisine={cuisine}
-//         setCuisine={setCuisine}
-//         rating={rating}
-//         setRating={setRating}
-//         location={location}
-//         setLocation={setLocation}
-//       />
-
-//       <div className="restaurant-list">
-//         {filteredRestaurants.length === 0 ? (
-//           <p className="col-span-full text-center font-bold text-lg">
-//             No restaurants found.
-//           </p>
-//         ) : (
-//           filteredRestaurants.map((rest) => (
-//             <RestaurantCard key={rest._id} restaurant={rest} />
-//           ))
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default RestaurantListing;
 //src/pages/RestaurantListing.jsx
 import React, { useEffect, useState } from "react";
 import RestaurantCard from "../components/RestaurantCard";
 import FilterBar from "../components/FilterBar";
 import Navbar from "../components/Navbar";   // ✅ IMPORT NAVBAR
+import { Loader2 } from "lucide-react";
 
 const RestaurantListing = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -121,33 +61,38 @@ const RestaurantListing = () => {
 
   if (loading)
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#B197A4]">
-        <p className="text-3xl font-extrabold text-white animate-pulse">Loading Deliciousness...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+        <div className="bg-white/90 backdrop-blur-sm p-8 rounded-full shadow-2xl">
+          <Loader2 className="animate-spin text-indigo-600" size={48} />
+        </div>
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-[#B197A4] pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 pb-20 font-sans">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-6">
-        <h1 className="text-left text-5xl md:text-6xl font-extrabold mt-10 mb-8 text-gradient bg-gradient-to-r from-purple-800 via-pink-600 to-yellow-500 bg-clip-text text-transparent tracking-tight">
-          RESTAURANT LISTING
+      <div className="max-w-7xl mx-auto px-6 pt-32">
+        <h1 className="text-left text-5xl md:text-6xl font-extrabold mb-8 text-white drop-shadow-md tracking-tight">
+          Restaurant Listing
         </h1>
 
-        <FilterBar
-          dataset={restaurants}
-          cuisine={cuisine}
-          setCuisine={setCuisine}
-          rating={rating}
-          setRating={setRating}
-          location={location}
-          setLocation={setLocation}
-        />
+        {/* Filter Bar container with glass effect if FilterBar itself doesn't have it */}
+        <div className="mb-10">
+          <FilterBar
+            dataset={restaurants}
+            cuisine={cuisine}
+            setCuisine={setCuisine}
+            rating={rating}
+            setRating={setRating}
+            location={location}
+            setLocation={setLocation}
+          />
+        </div>
 
         {restaurants.length === 0 ? (
-          <div className="bg-white/10 backdrop-blur-md rounded-3xl p-20 text-center border border-white/20">
-            <p className="text-2xl font-bold text-white/80">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-20 text-center border border-white/20 shadow-xl">
+            <p className="text-2xl font-bold text-gray-600">
               No restaurants match your filters. Try something else! 🍕
             </p>
           </div>
@@ -165,15 +110,15 @@ const RestaurantListing = () => {
             <button
               disabled={currentPage === 1}
               onClick={() => handlePageChange(currentPage - 1)}
-              className={`px-8 py-3 rounded-2xl font-bold shadow-xl transition-all duration-300 ${currentPage === 1
-                ? "bg-white/10 text-white/30 cursor-not-allowed"
-                : "bg-white text-purple-700 hover:bg-purple-600 hover:text-white transform hover:scale-105"
+              className={`px-6 py-3 rounded-xl font-bold shadow-lg transition-all duration-300 ${currentPage === 1
+                ? "bg-white/20 text-white/50 cursor-not-allowed"
+                : "bg-white text-indigo-600 hover:bg-indigo-50 hover:scale-105"
                 }`}
             >
               ← Previous
             </button>
 
-            <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/30 shadow-inner">
+            <div className="bg-white/20 backdrop-blur-md px-6 py-3 rounded-xl border border-white/30 shadow-inner">
               <span className="text-white font-bold text-lg">
                 Page {currentPage} of {totalPages}
               </span>
@@ -182,9 +127,9 @@ const RestaurantListing = () => {
             <button
               disabled={currentPage === totalPages}
               onClick={() => handlePageChange(currentPage + 1)}
-              className={`px-8 py-3 rounded-2xl font-bold shadow-xl transition-all duration-300 ${currentPage === totalPages
-                ? "bg-white/10 text-white/30 cursor-not-allowed"
-                : "bg-white text-purple-700 hover:bg-purple-600 hover:text-white transform hover:scale-105"
+              className={`px-6 py-3 rounded-xl font-bold shadow-lg transition-all duration-300 ${currentPage === totalPages
+                ? "bg-white/20 text-white/50 cursor-not-allowed"
+                : "bg-white text-indigo-600 hover:bg-indigo-50 hover:scale-105"
                 }`}
             >
               Next →
