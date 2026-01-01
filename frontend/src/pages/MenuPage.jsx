@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../config/axiosConfig";
+import { toast } from "react-hot-toast";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
@@ -10,6 +11,7 @@ export default function MenuPage() {
   const [loading, setLoading] = useState(true);
 
   const addToCart = async (item) => {
+    console.log("Attempting to add item:", item); // Debug log
     try {
       await api.post(
         "/cart/add",
@@ -22,10 +24,11 @@ export default function MenuPage() {
         { withCredentials: true }
       );
 
-      navigate("/cart");
+      toast.success(`${item.name} added to cart! 🛒`);
     } catch (err) {
       console.log(err);
-      alert("Failed to add item");
+      const errorMsg = err.response?.data?.msg || "Failed to add item. Please login again.";
+      toast.error(errorMsg);
     }
   };
 
@@ -47,7 +50,7 @@ export default function MenuPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#B197A4" }}>
+      <div className="min-h-screen flex items-center justify-center pt-24" style={{ backgroundColor: "#B197A4" }}>
         <p className="text-2xl font-bold text-white">Loading menu...</p>
       </div>
     );
@@ -55,14 +58,14 @@ export default function MenuPage() {
 
   if (!menu) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#B197A4" }}>
+      <div className="min-h-screen flex items-center justify-center pt-24" style={{ backgroundColor: "#B197A4" }}>
         <p className="text-2xl font-bold text-white">Menu not found.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-10" style={{ backgroundColor: "#B197A4" }}>
+    <div className="min-h-screen p-10 pt-28" style={{ backgroundColor: "#B197A4" }}>
       <Navbar />
 
       <h1 className="text-left text-5xl md:text-6xl font-extrabold mb-12 text-gradient bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent tracking-wide pl-6 md:pl-20">

@@ -1,25 +1,32 @@
-//src/components/Navbar.jsx
 import { Link } from "react-router-dom";
-import { FaUserCircle } from "react-icons/fa";
+import { UserCircle, UtensilsCrossed, ShoppingCart } from "lucide-react";
 
 export default function Navbar() {
   return (
-    <nav className="flex items-center justify-between bg-[#B08EA3] px-6 py-4 shadow-md">
-      
-      {/* Logo Circle */}
-      <div className="bg-[#F4A7B9] rounded-full px-8 py-3 text-black font-[Didot] text-2xl font-semibold">
-        BITE BUDDY
-      </div>
+    <nav className="flex items-center justify-between px-8 py-4 fixed w-full top-0 left-0 z-50 bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm">
 
-      {/* Title */}
-      <div className="flex-grow mx-6 bg-[#D3D3D3] text-center py-2 rounded-lg text-4xl font-bold font-itim">
-        BITE BUDDY
-      </div>
-
-      {/* Profile Icon */}
-      <Link to="/profile">
-        <FaUserCircle className="text-[#333] hover:text-black transition text-5xl cursor-pointer" />
+      {/* Logo Area */}
+      <Link to="/" className="flex items-center gap-2 group">
+        <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-all">
+          <UtensilsCrossed className="text-white" size={24} />
+        </div>
+        <div className="text-white font-[Didot] text-xl font-bold tracking-wider group-hover:opacity-90 transition-opacity">
+          BITE BUDDY
+        </div>
       </Link>
+
+      {/* Actions: Cart & Profile */}
+      <div className="flex items-center gap-6">
+        <Link to="/cart" className="relative group">
+          <div className="bg-white/20 p-2 rounded-full group-hover:bg-white/30 transition-all text-white">
+            <ShoppingCart size={24} />
+          </div>
+        </Link>
+
+        <Link to="/profile" className="flex items-center gap-2 text-white hover:text-indigo-100 transition-colors">
+          <UserCircle size={32} strokeWidth={1.5} />
+        </Link>
+      </div>
 
     </nav>
   );
