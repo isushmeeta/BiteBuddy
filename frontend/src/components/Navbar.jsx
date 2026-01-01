@@ -26,6 +26,16 @@ export default function Navbar() {
         <Link to="/profile" className="flex items-center gap-2 text-white hover:text-indigo-100 transition-colors">
           <UserCircle size={32} strokeWidth={1.5} />
         </Link>
+        <button
+          onClick={() => {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+          }}
+          className="text-white hover:text-red-300 font-bold ml-2"
+        >
+          Logout
+        </button>
       </div>
 
     </nav>

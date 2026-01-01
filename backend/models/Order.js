@@ -13,7 +13,10 @@ const orderSchema = new mongoose.Schema({
   restaurantName: { type: String, required: true },
   orderDate: { type: Date, default: Date.now },
   totalPrice: { type: Number, required: true },
+  address: { type: String, required: true }, // Added
+  phone: { type: String, required: true }, // Added
   paymentMethod: String,
+  paymentDetails: Object, // Added for card/wallet info
   items: [itemSchema],
   status: { type: String, enum: ["Pending", "Delivered", "Cancelled", "Preparing"], default: "Pending" },
 }, { timestamps: true });

@@ -24,6 +24,7 @@ export default function Login() {
       );
       // alert("Login Successful 🎉"); // Removed alert for better UX, maybe use toast later
       localStorage.setItem("user", JSON.stringify(res.data.user));
+      localStorage.setItem("token", res.data.token); // Store token backup
       navigate("/restaurants");
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");

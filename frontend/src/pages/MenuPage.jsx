@@ -18,12 +18,13 @@ export default function MenuPage() {
         price: item.price,
         image: item.image,
         qty: 1,
-      });
+      }, { withCredentials: true });
 
       toast.success(`${item.name} added to cart! 🛒`);
     } catch (err) {
       console.log(err);
-      alert("Failed to add item");
+      const errorMsg = err.response?.data?.msg || "Failed to add item. Please login again.";
+      toast.error(errorMsg);
     }
   };
 

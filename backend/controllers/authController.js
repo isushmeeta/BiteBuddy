@@ -46,7 +46,8 @@ export const loginUser = async (req, res) => {
       secure: isProd,
       sameSite: isProd ? "none" : "lax"
     });
-    res.json({ msg: "Login successful", user });
+    // Return token in body as well for localStorage fallback
+    res.json({ msg: "Login successful", user, token });
   } catch (err) {
     console.error(`Login error: ${err.message}`);
     res.status(500).json({ msg: err.message });
