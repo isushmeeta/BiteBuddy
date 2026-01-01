@@ -41,7 +41,7 @@ const OrderCard = ({ order }) => {
         </div>
 
         <button
-          onClick={() => navigate(`/orders/${order._id}`)}
+          onClick={() => navigate(`/orders/${order.orderId}`)}
           className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
         >
           VIEW ORDER DETAILS

@@ -61,9 +61,19 @@ export const createOrder = async (req, res) => {
       price: cartItem.price
     }));
 
+    // Generate 8-character alphanumeric Order ID
+    const generateShortId = () => {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      for (let i = 0; i < 8; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    };
+
     // 2. Create Order Object
     const newOrder = new Order({
-      orderId: uuidv4(),
+      orderId: generateShortId(),
       customerId: req.user.id,
       restaurantName: "Mix",
       items: orderItems,
@@ -105,9 +115,19 @@ export const reorder = async (req, res) => {
     delete orderData.createdAt;
     delete orderData.updatedAt;
 
+    // Generate 8-character alphanumeric Order ID
+    const generateShortId = () => {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      for (let i = 0; i < 8; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    };
+
     const newOrder = new Order({
       ...orderData,
-      orderId: uuidv4(),
+      orderId: generateShortId(),
       orderDate: new Date(),
       status: "Pending", // Ensure new order starts as Pending
     });
@@ -126,11 +146,68 @@ export const reorder = async (req, res) => {
 
 export const getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.orderId);
+    const order = await Order.findOne({ orderId: req.params.orderId });
     if (!order) return res.status(404).json({ message: "Order not found" });
     res.json(order);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 });
+    res.json({ success: true, orders });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+}
+
+export const assignOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { deliveryPartnerId } = req.body;
+
+    const order = await Order.findOne({ $or: [{ _id: orderId }, { orderId: orderId }] });
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    order.deliveryPartnerId = deliveryPartnerId;
+    order.status = "Assigned";
+
+    await order.save();
+    res.json({ success: true, order });
+  } catch (err) {
+    console.error("Assign Order Error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const cancelOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const order = await Order.findOne({ $or: [{ _id: orderId }, { orderId: orderId }] });
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    order.status = "Cancelled";
+    await order.save();
+    res.json({ success: true, order });
+  } catch (err) {
+    console.error("Cancel Order Error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const deleteOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const order = await Order.findOneAndDelete({ $or: [{ _id: orderId }, { orderId: orderId }] });
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    res.json({ success: true, message: "Order deleted successfully" });
+  } catch (err) {
+    console.error("Delete Order Error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };

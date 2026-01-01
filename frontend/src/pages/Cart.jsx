@@ -70,14 +70,23 @@ export default function Cart() {
           className="w-full max-w-4xl bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border border-white/20"
         >
           {/* Header */}
-          <div className="flex items-center gap-4 mb-8">
-            <div className="bg-indigo-100 p-3 rounded-full text-indigo-600">
-              <ShoppingCart size={32} />
+          <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <div className="flex items-center gap-4">
+              <div className="bg-indigo-100 p-3 rounded-full text-indigo-600">
+                <ShoppingCart size={32} />
+              </div>
+              <h1 className="text-3xl font-bold text-gray-800">Your Cart</h1>
+              <span className="bg-indigo-100 text-indigo-800 text-sm font-bold px-3 py-1 rounded-full">
+                {cart.length} items
+              </span>
             </div>
-            <h1 className="text-3xl font-bold text-gray-800">Your Cart</h1>
-            <span className="bg-indigo-100 text-indigo-800 text-sm font-bold px-3 py-1 rounded-full">
-              {cart.length} items
-            </span>
+
+            <button
+              onClick={() => navigate("/restaurants")}
+              className="px-6 py-3 bg-indigo-50 text-indigo-700 font-bold rounded-xl shadow-md hover:shadow-lg hover:bg-white transform hover:scale-105 transition-all duration-300"
+            >
+              ← Back to Restaurants
+            </button>
           </div>
 
           {cart.length === 0 ? (

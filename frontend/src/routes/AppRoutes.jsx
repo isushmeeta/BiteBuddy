@@ -16,6 +16,7 @@ import AdminMenuPage from "../pages/AdminMenuPage.jsx";
 import AdminDashboard from "../pages/AdminDashboard";
 import AdminRoute from "./AdminRoute";
 import OrderDetails from "../pages/OrderDetails";
+import DeliveryDashboard from "../pages/DeliveryDashboard";
 
 export default function AppRoutes() {
   return (
@@ -32,6 +33,7 @@ export default function AppRoutes() {
         <Route path="/menu/:restaurantId" element={<MenuPage />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-success/:orderId" element={<OrderSuccess />} />
+        <Route path="/delivery" element={<DeliveryDashboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin/:restaurantId" element={
           <AdminRoute>

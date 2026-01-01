@@ -22,6 +22,7 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [role, setRole] = useState("customer"); // Added role state
   const [countryCode, setCountryCode] = useState(COUNTRY_CODES[0].code);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +49,7 @@ export default function Register() {
     try {
       const res = await api.post(
         "/auth/register",
-        { name, email, password, phone: fullPhone }
+        { name, email, password, phone: fullPhone, role }
       );
       // alert("Account created successfully 🎉");
       navigate("/login");
@@ -153,6 +154,20 @@ export default function Register() {
                     required
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Account Type</label>
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none appearance-none cursor-pointer"
+                >
+                  <option value="customer">Customer</option>
+                  <option value="delivery">Delivery Partner</option>
+                  <option value="restaurant">Restaurant Owner</option>
+                  <option value="admin">Admin</option>
+                </select>
               </div>
             </div>
 

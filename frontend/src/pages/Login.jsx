@@ -25,7 +25,17 @@ export default function Login() {
       // alert("Login Successful 🎉"); // Removed alert for better UX, maybe use toast later
       localStorage.setItem("user", JSON.stringify(res.data.user));
       localStorage.setItem("token", res.data.token); // Store token backup
-      navigate("/restaurants");
+
+      const role = res.data.user.role;
+      if (role === "admin") {
+        navigate("/admin/dashboard"); // Or wherever admin goes
+      } else if (role === "delivery") {
+        navigate("/delivery");
+      } else if (role === "restaurant") {
+        navigate("/restaurants"); // Or specific restaurant dashboard
+      } else {
+        navigate("/restaurants");
+      }
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");
     } finally {

@@ -1,28 +1,58 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import api from "../config/axiosConfig";
+import { Package, Truck, User, Menu, ExternalLink, ChevronDown, ShoppingBag } from "lucide-react";
 
 export default function AdminDashboard() {
   const { restaurantId } = useParams();
   const navigate = useNavigate();
   const [restaurants, setRestaurants] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch initial data
   useEffect(() => {
-    const fetchRestaurants = async () => {
+    const fetchData = async () => {
       try {
-        const res = await api.get("/restaurants");
-        setRestaurants(res.data.restaurants);
+        const [resRest, resOrders, resPartners] = await Promise.all([
+          api.get("/restaurants"),
+          api.get("/orders/all"),
+          api.get("/auth/partners")
+        ]);
+        setRestaurants(resRest.data.restaurants);
+        setOrders(resOrders.data.orders);
+        setPartners(resPartners.data.partners);
+
+        // If no restaurant selected and we have restaurants, select the first one
+        if (!restaurantId && resRest.data.restaurants.length > 0) {
+          // Optional: Auto-select could be confusing if they just want to see orders. 
+          // Let's leave it as is, "Select Restaurant" prompt is fine.
+        }
+
       } catch (error) {
-        console.error("Failed to fetch restaurants:", error);
+        console.error("Failed to fetch data:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchRestaurants();
+    fetchData();
   }, []);
+
+  const handleAssign = async (orderId, partnerId) => {
+    if (!partnerId) return alert("Please select a partner");
+    try {
+      await api.put(`/orders/assign/${orderId}`, { deliveryPartnerId: partnerId });
+      alert("Order assigned successfully!");
+      // Refresh orders
+      const res = await api.get("/orders/all");
+      setOrders(res.data.orders);
+    } catch (err) {
+      console.error("Assign failed:", err);
+      alert("Failed to assign order");
+    }
+  };
 
   const handleRestaurantChange = (e) => {
     const newId = e.target.value;
@@ -31,105 +61,232 @@ export default function AdminDashboard() {
     }
   };
 
-  const currentRestaurant = restaurants.find(r => r._id === restaurantId);
-
   return (
-    <div className="min-h-screen p-10" style={{ backgroundColor: "#B197A4" }}>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex flex-col font-sans">
       <Navbar />
 
-      <h1 className="text-left text-5xl md:text-6xl font-extrabold mb-12 text-gradient bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent tracking-wide pl-6 md:pl-20">
-        ADMIN DASHBOARD
-      </h1>
+      <div className="flex-1 p-4 md:p-8 pt-24 mt-16 md:mt-20 max-w-7xl mx-auto w-full">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <div>
+            <h1 className="text-4xl font-extrabold text-white drop-shadow-lg tracking-tight">Admin Dashboard</h1>
+            <p className="text-indigo-100 mt-1 font-medium">Manage your restaurant, menu, and orders.</p>
+          </div>
 
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white/90 backdrop-blur-sm shadow-2xl p-8 rounded-2xl">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 pb-4 border-b-2 border-purple-200">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 md:mb-0">
-              Restaurant Management
-            </h2>
+          {/* Restaurant Selector */}
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <ShoppingBag className="h-5 w-5 text-indigo-500" />
+            </div>
+            <select
+              value={restaurantId || ""}
+              onChange={handleRestaurantChange}
+              className="appearance-none bg-white/95 backdrop-blur-sm border-2 border-transparent text-gray-700 py-3 pl-10 pr-10 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-indigo-400 font-bold cursor-pointer min-w-[280px] shadow-xl transition-all hover:bg-white"
+            >
+              <option value="" disabled>Select Restaurant to Manage</option>
+              {restaurants.map((r) => (
+                <option key={r._id} value={r._id}>
+                  {r.name}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-indigo-500">
+              <ChevronDown size={20} />
+            </div>
+          </div>
+        </div>
 
-            {/* Restaurant Selector */}
-            <div className="relative">
-              <select
-                value={restaurantId || ""}
-                onChange={handleRestaurantChange}
-                className="appearance-none bg-purple-50 border border-purple-200 text-gray-700 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-purple-500 font-semibold cursor-pointer min-w-[200px]"
-              >
-                <option value="" disabled>Select Restaurant</option>
-                {restaurants.map((r) => (
-                  <option key={r._id} value={r._id}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                </svg>
+        {/* Info Grid (Visible if Restaurant Selected or General Stats) */}
+        {!restaurantId && (
+          <div className="bg-white/20 backdrop-blur-md border border-white/20 p-6 rounded-2xl text-white mb-8 shadow-lg">
+            <p className="flex items-center gap-2 font-semibold">
+              <span className="bg-white/20 p-1 rounded-full"><ChevronDown size={16} /></span>
+              Please select a restaurant from the dropdown above to manage its menu or view its dashboard statistics.
+            </p>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Left Column: Quick Actions */}
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-white/90 backdrop-blur-sm p-6 rounded-3xl shadow-2xl border border-white/20">
+              <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                <span className="p-2 bg-indigo-100 rounded-lg text-indigo-600"><Menu size={20} /></span>
+                Quick Actions
+              </h3>
+
+              <div className="space-y-4">
+                <button
+                  onClick={() => restaurantId ? navigate(`/admin/menu/${restaurantId}`) : alert("Please select a restaurant first!")}
+                  className={`w-full group relative overflow-hidden py-4 px-6 ${restaurantId ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg' : 'bg-gray-100 text-gray-400 cursor-not-allowed'} font-bold rounded-xl transition-all duration-300 flex items-center justify-between`}
+                >
+                  <span>Manage Menu</span>
+                  {restaurantId && <ExternalLink size={18} className="opacity-70 group-hover:translate-x-1 transition-transform" />}
+                </button>
+
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="w-full group relative overflow-hidden py-4 px-6 bg-white border-2 border-indigo-50 text-indigo-600 hover:bg-indigo-50 font-bold rounded-xl transition-all duration-300 flex items-center justify-between"
+                >
+                  <span>My Profile</span>
+                  <User size={18} className="opacity-70" />
+                </button>
+
+                <button
+                  onClick={() => navigate("/restaurants")}
+                  className="w-full group relative overflow-hidden py-4 px-6 bg-white border-2 border-gray-100 text-gray-600 hover:bg-gray-50 font-bold rounded-xl transition-all duration-300 flex items-center justify-between"
+                >
+                  <span>View Live Site</span>
+                  <ExternalLink size={18} className="opacity-70" />
+                </button>
+              </div>
+            </div>
+
+            {/* KPI Card */}
+            <div className="bg-gradient-to-br from-pink-500 to-orange-400 p-6 rounded-3xl shadow-2xl text-white">
+              <h3 className="text-lg font-bold opacity-90 mb-1">Total Orders</h3>
+              <div className="text-5xl font-extrabold mb-2">{orders.length}</div>
+              <div className="flex items-center gap-2 text-sm font-medium bg-white/20 w-fit px-3 py-1 rounded-full">
+                <Package size={14} />
+                All time
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Manage Menu */}
-            <button
-              onClick={() => navigate(`/admin/menu/${restaurantId}`)}
-              className="group relative overflow-hidden py-6 px-8 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-            >
-              <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-              <div className="relative flex flex-col items-center">
-                <svg className="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-                <span className="text-lg">Manage Menu</span>
+          {/* Right Column: Orders Table */}
+          <div className="lg:col-span-2">
+            <div className="bg-white/95 backdrop-blur-sm p-6 md:p-8 rounded-3xl shadow-2xl border border-white/20 h-full">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+                  Recent Orders
+                </h2>
+                <span className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                  Last {orders.length} orders
+                </span>
               </div>
-            </button>
 
-            {/* View Orders */}
-            <button
-              onClick={() => navigate(`/order-history`)}
-              className="group relative overflow-hidden py-6 px-8 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-            >
-              <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-              <div className="relative flex flex-col items-center">
-                <svg className="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-                <span className="text-lg">View Orders</span>
-              </div>
-            </button>
+              {loading ? (
+                <div className="flex justify-center items-center py-20">
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+                </div>
+              ) : orders.length === 0 ? (
+                <div className="text-center py-20 text-gray-400">
+                  <Package size={48} className="mx-auto mb-2 opacity-20" />
+                  No orders placed yet.
+                </div>
+              ) : (
+                <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                  {orders.map(order => (
+                    <div key={order._id} className="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-lg transition-all duration-300 group">
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                        <div>
+                          <div className="flex items-center gap-3">
+                            <span className="text-lg font-bold text-gray-800">#{order.orderId}</span>
+                            <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide ${order.status === 'Delivered' ? 'bg-green-100 text-green-700' :
+                              order.status === 'Cancelled' ? 'bg-red-100 text-red-700' :
+                                'bg-yellow-100 text-yellow-700'
+                              }`}>
+                              {order.status}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                            <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                            <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                            <span>{new Date(order.createdAt).toLocaleTimeString()}</span>
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">৳{order.totalPrice}</p>
+                        </div>
+                      </div>
 
-            {/* Analytics/Stats Card */}
-            <button
-              onClick={() => navigate("/profile")}
-              className="group relative overflow-hidden py-6 px-8 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-            >
-              <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-              <div className="relative flex flex-col items-center">
-                <svg className="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <span className="text-lg">My Profile</span>
-              </div>
-            </button>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+                        <div className="flex gap-2">
+                          <span className="font-semibold text-gray-800 min-w-[70px]">To:</span>
+                          {order.address}
+                        </div>
+                        <div className="flex gap-2">
+                          <span className="font-semibold text-gray-800 min-w-[70px]">Items:</span>
+                          <span className="truncate">{order.items.map(i => `${i.qty}x ${i.item}`).join(", ")}</span>
+                        </div>
+                      </div>
 
-            {/* Back to Restaurants */}
-            <button
-              onClick={() => navigate("/restaurants")}
-              className="group relative overflow-hidden py-6 px-8 bg-gradient-to-r from-gray-600 to-gray-800 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300"
-            >
-              <div className="absolute inset-0 bg-white/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-              <div className="relative flex flex-col items-center">
-                <svg className="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                <span className="text-lg">Browse Restaurants</span>
-              </div>
-            </button>
+                      <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center gap-2 w-full sm:w-auto">
+                          <div className="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                            <Truck size={18} />
+                          </div>
+                          <select
+                            className="bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-medium w-full sm:w-[200px]"
+                            onChange={(e) => handleAssign(order._id, e.target.value)}
+                            defaultValue=""
+                            value={order.deliveryPartnerId || ""}
+                          >
+                            <option value="" disabled className="text-gray-400">Assign Partner</option>
+                            {partners.map(p => (
+                              <option key={p._id} value={p._id}>{p.name}</option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          {/* Cancel Button - Only for active orders */}
+                          {!['Delivered', 'Cancelled'].includes(order.status) && (
+                            <button
+                              onClick={async () => {
+                                if (window.confirm("Are you sure you want to cancel this order?")) {
+                                  try {
+                                    await api.put(`/orders/cancel/${order._id}`);
+                                    alert("Order cancelled");
+                                    // Refresh
+                                    const res = await api.get("/orders/all");
+                                    setOrders(res.data.orders);
+                                  } catch (e) { console.error(e); alert("Failed to cancel"); }
+                                }
+                              }}
+                              className="text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg font-bold text-sm transition-colors border border-red-100"
+                            >
+                              Cancel
+                            </button>
+                          )}
+
+                          {/* Delete Button - Only for Delivered/Cancelled */}
+                          {['Delivered', 'Cancelled'].includes(order.status) && (
+                            <button
+                              onClick={async () => {
+                                if (window.confirm("Delete this order permenantly?")) {
+                                  try {
+                                    await api.delete(`/orders/delete/${order._id}`);
+                                    alert("Order deleted");
+                                    // Refresh
+                                    const res = await api.get("/orders/all");
+                                    setOrders(res.data.orders);
+                                  } catch (e) { console.error(e); alert("Failed to delete"); }
+                                }
+                              }}
+                              className="text-gray-400 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors"
+                              title="Delete Order"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></svg>
+                            </button>
+                          )}
+
+                          <button
+                            onClick={() => navigate(`/orders/${order.orderId}`)}
+                            className="text-indigo-600 hover:text-white hover:bg-indigo-600 font-bold text-sm px-4 py-2 rounded-lg transition-all duration-200"
+                          >
+                            View Full Order
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
-

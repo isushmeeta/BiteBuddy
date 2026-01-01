@@ -11,6 +11,7 @@ import cartRoutes from "./routes/cartRoutes.js";
 import restaurantRoutes from "./routes/restaurantRoutes.js";
 import menuRoutes from "./routes/menuRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import deliveryRoutes from "./routes/deliveryRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -54,6 +55,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/restaurants", restaurantRoutes);
 app.use("/api/menu", menuRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/delivery", deliveryRoutes);
 
 
 

@@ -11,7 +11,7 @@ export default function OrderSuccess() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex flex-col font-sans">
       <Navbar />
 
-      <div className="flex flex-1 justify-center items-center py-20 px-4 pt-28">
+      <div className="flex flex-1 justify-center items-center py-20 px-4 pt-40">
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -39,11 +39,11 @@ export default function OrderSuccess() {
 
           <div className="flex flex-col gap-4">
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/restaurants")}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/50 transition-all flex items-center justify-center gap-2"
             >
               <Home size={20} />
-              Continue Shopping
+              Continue Order
             </button>
 
             <button

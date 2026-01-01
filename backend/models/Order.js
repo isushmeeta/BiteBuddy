@@ -18,7 +18,8 @@ const orderSchema = new mongoose.Schema({
   paymentMethod: String,
   paymentDetails: Object, // Added for card/wallet info
   items: [itemSchema],
-  status: { type: String, enum: ["Pending", "Delivered", "Cancelled", "Preparing"], default: "Pending" },
+  status: { type: String, enum: ["Pending", "Delivered", "Cancelled", "Preparing", "Assigned", "Picked Up", "On the Way"], default: "Pending" },
+  deliveryPartnerId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 }, { timestamps: true });
 
 orderSchema.index({ customerId: 1, orderDate: -1 });

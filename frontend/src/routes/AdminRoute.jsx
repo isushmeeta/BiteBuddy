@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function AdminRoute({ children }) {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    if (user && user.name === "admin") {
+    if (user && user.role === "admin") {
         return children;
     }
 

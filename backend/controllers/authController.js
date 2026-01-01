@@ -6,13 +6,13 @@ import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, role } = req.body;
 
     const exist = await User.findOne({ email });
     if (exist) return res.status(400).json({ msg: "Email already exists" });
 
     const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hash, phone });
+    const user = await User.create({ name, email, password: hash, phone, role });
 
     res.json({ msg: "User registered", user });
   } catch (err) {
@@ -38,7 +38,7 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ msg: "Wrong password" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
     const isProd = process.env.NODE_ENV === "production";
 
     res.cookie("token", token, {
@@ -74,5 +74,15 @@ export const updateUserProfile = async (req, res) => {
   } catch (err) {
     console.error("Update error:", err);
     res.status(500).json({ msg: "Failed to update profile" });
+  }
+};
+
+export const getDeliveryPartners = async (req, res) => {
+  try {
+    const partners = await User.find({ role: "delivery" }).select("-password");
+    res.json({ success: true, partners });
+  } catch (err) {
+    console.error("Get Partners Error:", err);
+    res.status(500).json({ msg: "Server error" });
   }
 };

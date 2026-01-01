@@ -64,23 +64,23 @@ export default function OrderHistory() {
   }
 
   return (
-    <div className="min-h-screen p-10" style={{ backgroundColor: "#B197A4" }}>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 pt-32 pb-20 px-4 md:px-10">
       <Navbar />
 
-      <h1 className="text-left text-5xl md:text-6xl font-extrabold mb-12 text-gradient bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 bg-clip-text text-transparent tracking-wide pl-6 md:pl-20">
+      <h1 className="text-left text-4xl md:text-5xl font-extrabold mb-12 text-white tracking-wide drop-shadow-lg pl-2">
         ORDER HISTORY
       </h1>
 
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {orders.length === 0 ? (
-          <div className="bg-white/90 backdrop-blur-sm shadow-2xl p-12 rounded-2xl text-center">
+          <div className="bg-white/90 backdrop-blur-sm shadow-2xl p-12 rounded-3xl text-center border border-white/20">
             <svg className="w-24 h-24 mx-auto mb-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
-            <p className="text-gray-500 text-xl">No orders yet. Start browsing restaurants!</p>
+            <p className="text-gray-600 text-xl font-medium">No orders yet. Start browsing restaurants!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {orders.map((order) => (
               <OrderCard
                 key={order._id}
