@@ -39,18 +39,30 @@ export const reorder = async (req, res) => {
     const prev = await Order.findById(orderId);
     if (!prev) return res.status(404).json({ message: "Order not found" });
 
+    const orderData = prev.toObject();
+
+    // Remove fields that should not be copied
+    delete orderData._id;
+    delete orderData.__v;
+    delete orderData.createdAt;
+    delete orderData.updatedAt;
+
     const newOrder = new Order({
-      ...prev.toObject(),
-      _id: undefined,
+      ...orderData,
       orderId: uuidv4(),
       orderDate: new Date(),
+      status: "Pending", // Ensure new order starts as Pending
     });
 
     await newOrder.save();
     res.json({ success: true, order: newOrder });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Server error" });
+    console.error("Reorder Error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error during reorder",
+      error: err.message
+    });
   }
 };
 

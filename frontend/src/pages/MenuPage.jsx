@@ -13,22 +13,17 @@ export default function MenuPage() {
   const addToCart = async (item) => {
     console.log("Attempting to add item:", item); // Debug log
     try {
-      await api.post(
-        "/cart/add",
-        {
-          name: item.name,
-          price: item.price,
-          image: item.image,
-          qty: 1,
-        },
-        { withCredentials: true }
-      );
+      await api.post("/cart/add", {
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        qty: 1,
+      });
 
       toast.success(`${item.name} added to cart! 🛒`);
     } catch (err) {
       console.log(err);
-      const errorMsg = err.response?.data?.msg || "Failed to add item. Please login again.";
-      toast.error(errorMsg);
+      alert("Failed to add item");
     }
   };
 
