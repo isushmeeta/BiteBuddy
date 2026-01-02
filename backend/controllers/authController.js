@@ -86,3 +86,18 @@ export const getDeliveryPartners = async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 };
+
+export const logoutUser = async (req, res) => {
+  try {
+    const isProd = process.env.NODE_ENV === "production";
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+    });
+    res.json({ msg: "Logged out successfully" });
+  } catch (err) {
+    console.error(`Logout error: ${err.message}`);
+    res.status(500).json({ msg: err.message });
+  }
+};

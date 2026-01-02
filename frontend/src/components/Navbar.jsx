@@ -1,7 +1,22 @@
-import { Link } from "react-router-dom";
-import { UserCircle, UtensilsCrossed, ShoppingCart } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserCircle, UtensilsCrossed, ShoppingCart, LogOut } from "lucide-react";
+import api from "../config/axiosConfig";
 
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await api.post("/auth/logout");
+    } catch (err) {
+      console.error("Server-side logout failed:", err);
+    } finally {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+  };
+
   return (
     <nav className="flex items-center justify-between px-8 py-4 fixed w-full top-0 left-0 z-50 bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm">
 
@@ -16,7 +31,6 @@ export default function Navbar() {
       </Link>
 
       {/* Actions: Cart & Profile */}
-      {/* Actions: Cart & Profile */}
       <div className="flex items-center gap-6">
         {localStorage.getItem("token") ? (
           <>
@@ -29,15 +43,13 @@ export default function Navbar() {
             <Link to="/profile" className="flex items-center gap-2 text-white hover:text-indigo-100 transition-colors">
               <UserCircle size={32} strokeWidth={1.5} />
             </Link>
+
             <button
-              onClick={() => {
-                localStorage.removeItem("user");
-                localStorage.removeItem("token");
-                window.location.href = "/login";
-              }}
-              className="text-white hover:text-red-300 font-bold ml-2"
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-100 font-bold rounded-xl transition-all border border-red-500/20 backdrop-blur-sm group"
             >
-              Logout
+              <LogOut size={18} className="group-hover:translate-x-1 transition-transform" />
+              <span>Logout</span>
             </button>
           </>
         ) : (
