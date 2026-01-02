@@ -46,9 +46,9 @@ export default function Navbar() {
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-100 font-bold rounded-xl transition-all border border-red-500/20 backdrop-blur-sm group"
+              className="flex items-center gap-2 px-5 py-2 bg-white text-red-600 font-bold rounded-xl hover:bg-gray-100 transition-all shadow-lg"
             >
-              <LogOut size={18} className="group-hover:translate-x-1 transition-transform" />
+              <LogOut size={18} />
               <span>Logout</span>
             </button>
           </>
