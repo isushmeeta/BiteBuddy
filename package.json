@@ -1,0 +1,16 @@
+{
+    "name": "bitebuddy-root",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+        "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+        "build": "cd frontend && npm install && npm run build"
+    },
+    "devDependencies": {
+        "concurrently": "^8.0.0"
+    },
+    "engines": {
+        "node": ">=18"
+    }
+}
