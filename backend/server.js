@@ -24,10 +24,9 @@ app.use(cookieParser());
 
 // CORS configuration for multiple origins (development + production)
 const allowedOrigins = [
-  process.env.CLIENT_URL,
-  'http://localhost:5173',
-  'http://localhost:3000',
-  'https://bitebuddy-gy8l.onrender.com'
+  process.env.CLIENT_URL, // Production Frontend (Vercel)
+  'http://localhost:5173', // Local Development
+  'http://localhost:3000'
 ].filter(Boolean);
 
 app.use(
