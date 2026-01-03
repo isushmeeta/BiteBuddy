@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../config/axiosConfig";
 import Navbar from "../components/Navbar";
 import { CheckCircle, Truck, Package } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 export default function DeliveryDashboard() {
     const [orders, setOrders] = useState([]);
@@ -30,7 +31,7 @@ export default function DeliveryDashboard() {
             fetchOrders();
         } catch (err) {
             console.error("Update status failed:", err);
-            alert("Failed to update status");
+            toast.error("Failed to update status");
         }
     }
 
@@ -169,11 +170,23 @@ export default function DeliveryDashboard() {
                                             <div className="flex items-center gap-2 mt-2">
                                                 {!['Delivered', 'Cancelled'].includes(order.status) && (
                                                     <button
-                                                        onClick={async () => {
-                                                            if (window.confirm("Cancel this delivery?")) {
-                                                                try { await api.put(`/orders/cancel/${order._id}`); fetchOrders(); }
-                                                                catch (e) { alert("Failed"); }
-                                                            }
+                                                        onClick={() => {
+                                                            toast((t) => (
+                                                                <div className="flex flex-col gap-3">
+                                                                    <p className="font-bold text-gray-800">Cancel this delivery?</p>
+                                                                    <div className="flex justify-end gap-2">
+                                                                        <button onClick={() => toast.dismiss(t.id)} className="px-3 py-1 text-xs font-bold text-gray-400 hover:bg-gray-100 rounded-lg">No</button>
+                                                                        <button
+                                                                            onClick={async () => {
+                                                                                toast.dismiss(t.id);
+                                                                                try { await api.put(`/orders/cancel/${order._id}`); fetchOrders(); toast.success("Delivery cancelled"); }
+                                                                                catch (e) { toast.error("Failed"); }
+                                                                            }}
+                                                                            className="px-3 py-1 text-xs font-bold bg-red-500 text-white rounded-lg"
+                                                                        >Yes, Cancel</button>
+                                                                    </div>
+                                                                </div>
+                                                            ), { duration: 5000, position: 'top-center' });
                                                         }}
                                                         className="flex-1 border border-red-200 text-red-500 hover:bg-red-50 py-2 rounded-lg text-sm font-bold opacity-60 hover:opacity-100 transition-opacity"
                                                     >
@@ -182,11 +195,23 @@ export default function DeliveryDashboard() {
                                                 )}
                                                 {['Delivered', 'Cancelled'].includes(order.status) && (
                                                     <button
-                                                        onClick={async () => {
-                                                            if (window.confirm("Remove this order from history?")) {
-                                                                try { await api.delete(`/orders/delete/${order._id}`); fetchOrders(); }
-                                                                catch (e) { alert("Failed"); }
-                                                            }
+                                                        onClick={() => {
+                                                            toast((t) => (
+                                                                <div className="flex flex-col gap-3">
+                                                                    <p className="font-bold text-gray-800">Remove from history?</p>
+                                                                    <div className="flex justify-end gap-2">
+                                                                        <button onClick={() => toast.dismiss(t.id)} className="px-3 py-1 text-xs font-bold text-gray-400 hover:bg-gray-100 rounded-lg">No</button>
+                                                                        <button
+                                                                            onClick={async () => {
+                                                                                toast.dismiss(t.id);
+                                                                                try { await api.delete(`/orders/delete/${order._id}`); fetchOrders(); toast.success("Removed"); }
+                                                                                catch (e) { toast.error("Failed"); }
+                                                                            }}
+                                                                            className="px-3 py-1 text-xs font-bold bg-red-600 text-white rounded-lg"
+                                                                        >Yes, Remove</button>
+                                                                    </div>
+                                                                </div>
+                                                            ), { duration: 5000, position: 'top-center' });
                                                         }}
                                                         className="flex-1 border border-gray-200 text-gray-400 hover:bg-red-50 hover:text-red-500 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-1 group"
                                                     >

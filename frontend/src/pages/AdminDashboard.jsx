@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import api from "../config/axiosConfig";
 import { Package, Truck, User, Menu, ExternalLink, ChevronDown, ShoppingBag } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 export default function AdminDashboard() {
   const { restaurantId } = useParams();
@@ -41,16 +42,16 @@ export default function AdminDashboard() {
   }, []);
 
   const handleAssign = async (orderId, partnerId) => {
-    if (!partnerId) return alert("Please select a partner");
+    if (!partnerId) return toast.error("Please select a partner");
     try {
       await api.put(`/orders/assign/${orderId}`, { deliveryPartnerId: partnerId });
-      alert("Order assigned successfully!");
+      toast.success("Order assigned successfully!");
       // Refresh orders
       const res = await api.get("/orders/all");
       setOrders(res.data.orders);
     } catch (err) {
       console.error("Assign failed:", err);
-      alert("Failed to assign order");
+      toast.error("Failed to assign order");
     }
   };
 
@@ -117,7 +118,7 @@ export default function AdminDashboard() {
 
               <div className="space-y-4">
                 <button
-                  onClick={() => restaurantId ? navigate(`/admin/menu/${restaurantId}`) : alert("Please select a restaurant first!")}
+                  onClick={() => restaurantId ? navigate(`/admin/menu/${restaurantId}`) : toast.error("Please select a restaurant first!")}
                   className={`w-full group relative overflow-hidden py-4 px-6 ${restaurantId ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg' : 'bg-gray-100 text-gray-400 cursor-not-allowed'} font-bold rounded-xl transition-all duration-300 flex items-center justify-between`}
                 >
                   <span>Manage Menu</span>
@@ -233,16 +234,27 @@ export default function AdminDashboard() {
                           {/* Cancel Button - Only for active orders */}
                           {!['Delivered', 'Cancelled'].includes(order.status) && (
                             <button
-                              onClick={async () => {
-                                if (window.confirm("Are you sure you want to cancel this order?")) {
-                                  try {
-                                    await api.put(`/orders/cancel/${order._id}`);
-                                    alert("Order cancelled");
-                                    // Refresh
-                                    const res = await api.get("/orders/all");
-                                    setOrders(res.data.orders);
-                                  } catch (e) { console.error(e); alert("Failed to cancel"); }
-                                }
+                              onClick={() => {
+                                toast((t) => (
+                                  <div className="flex flex-col gap-3">
+                                    <p className="font-bold text-gray-800">Cancel this order?</p>
+                                    <div className="flex justify-end gap-2">
+                                      <button onClick={() => toast.dismiss(t.id)} className="px-3 py-1 text-xs font-bold text-gray-400 hover:bg-gray-100 rounded-lg">No</button>
+                                      <button
+                                        onClick={async () => {
+                                          toast.dismiss(t.id);
+                                          try {
+                                            await api.put(`/orders/cancel/${order._id}`);
+                                            toast.success("Order cancelled");
+                                            const res = await api.get("/orders/all");
+                                            setOrders(res.data.orders);
+                                          } catch (e) { toast.error("Failed to cancel"); }
+                                        }}
+                                        className="px-3 py-1 text-xs font-bold bg-red-500 text-white rounded-lg"
+                                      >Yes, Cancel</button>
+                                    </div>
+                                  </div>
+                                ), { duration: 5000, position: 'top-center' });
                               }}
                               className="text-red-500 hover:bg-red-50 px-3 py-2 rounded-lg font-bold text-sm transition-colors border border-red-100"
                             >
@@ -253,16 +265,27 @@ export default function AdminDashboard() {
                           {/* Delete Button - Only for Delivered/Cancelled */}
                           {['Delivered', 'Cancelled'].includes(order.status) && (
                             <button
-                              onClick={async () => {
-                                if (window.confirm("Delete this order permenantly?")) {
-                                  try {
-                                    await api.delete(`/orders/delete/${order._id}`);
-                                    alert("Order deleted");
-                                    // Refresh
-                                    const res = await api.get("/orders/all");
-                                    setOrders(res.data.orders);
-                                  } catch (e) { console.error(e); alert("Failed to delete"); }
-                                }
+                              onClick={() => {
+                                toast((t) => (
+                                  <div className="flex flex-col gap-3">
+                                    <p className="font-bold text-gray-800">Delete order permanently?</p>
+                                    <div className="flex justify-end gap-2">
+                                      <button onClick={() => toast.dismiss(t.id)} className="px-3 py-1 text-xs font-bold text-gray-400 hover:bg-gray-100 rounded-lg">No</button>
+                                      <button
+                                        onClick={async () => {
+                                          toast.dismiss(t.id);
+                                          try {
+                                            await api.delete(`/orders/delete/${order._id}`);
+                                            toast.success("Order deleted");
+                                            const res = await api.get("/orders/all");
+                                            setOrders(res.data.orders);
+                                          } catch (e) { toast.error("Failed to delete"); }
+                                        }}
+                                        className="px-3 py-1 text-xs font-bold bg-red-600 text-white rounded-lg"
+                                      >Yes, Delete</button>
+                                    </div>
+                                  </div>
+                                ), { duration: 5000, position: 'top-center' });
                               }}
                               className="text-gray-400 hover:text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg transition-colors"
                               title="Delete Order"
