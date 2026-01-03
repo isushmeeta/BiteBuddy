@@ -42,8 +42,8 @@ export default function Navbar() {
           </>
         ) : (
           <div className="flex gap-4">
-            <Link to="/resturants" className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl transition-all border border-white/20 backdrop-blur-sm">
-              Resturants
+            <Link to="/restaurants" className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white font-bold rounded-xl transition-all border border-white/20 backdrop-blur-sm">
+              Restaurants
             </Link>
             <Link to="/register" className="px-5 py-2 bg-white text-indigo-600 font-bold rounded-xl hover:bg-gray-100 transition-all shadow-lg">
               Register
