@@ -45,7 +45,11 @@
 *   **Auth**: JSON Web Token (JWT), BcryptJS
 
 ---
+## Deployment 
 
+*  **Link**: https://bitebuddy-nine.vercel.app/
+  
+---
 ## 🚀 Getting Started
 
 Follow these steps to run BiteBuddy locally.
