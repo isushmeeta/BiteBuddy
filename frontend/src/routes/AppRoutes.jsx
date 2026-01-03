@@ -8,6 +8,7 @@ import Cart from "../pages/Cart";
 import MenuPage from "../pages/MenuPage";
 import Profile from "../pages/Profile";
 import ForgotPassword from "../pages/forgotPassword";
+import ResetPassword from "../pages/ResetPassword";
 import RestaurantListing from "../pages/RestaurantListing";
 import Checkout from "../pages/Checkout";
 import OrderSuccess from "../pages/OrderSuccess";
@@ -26,6 +27,7 @@ export default function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/restaurants" element={<RestaurantListing />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order-history" element={<OrderHistory />} />

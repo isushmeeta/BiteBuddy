@@ -3,6 +3,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 export const registerUser = async (req, res) => {
   try {
@@ -86,3 +87,59 @@ export const getDeliveryPartners = async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 };
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    const token = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+    await user.save();
+
+    // Since we can't send real emails easily, we'll log the link to the console
+    const resetUrl = `${process.env.CLIENT_URL || "http://localhost:5173"}/reset-password/${token}`;
+    console.log(`\n---------------------------------`);
+    console.log(`PASSWORD RESET LINK FOR ${email}:`);
+    console.log(resetUrl);
+    console.log(`---------------------------------\n`);
+
+    res.json({ msg: "Password reset link sent to your email (check console in dev)" });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ msg: "Invalid or expired reset token" });
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+    user.password = hash;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+
+    await user.save();
+
+    res.json({ msg: "Password updated successfully" });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
+};
+

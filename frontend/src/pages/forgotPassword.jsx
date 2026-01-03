@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Mail, KeyRound, Loader2, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -17,9 +18,9 @@ export default function ForgotPassword() {
         "/auth/forgot-password",
         { email }
       );
-      alert("Password reset link sent to your email!");
+      toast.success("Password reset link sent to your email!");
     } catch (err) {
-      alert(err.response?.data?.msg || "Failed to send reset link");
+      toast.error(err.response?.data?.msg || "Failed to send reset link");
     } finally {
       setIsLoading(false);
     }

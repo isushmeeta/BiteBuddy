@@ -5,6 +5,7 @@ import api from "../config/axiosConfig";
 import { useState } from "react";
 import { Eye, EyeOff, Loader2, LogIn } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -36,8 +37,9 @@ export default function Login() {
       } else {
         navigate("/restaurants");
       }
+      toast.success("Login Successful 🎉");
     } catch (err) {
-      alert(err.response?.data?.msg || "Login failed");
+      toast.error(err.response?.data?.msg || "Login failed");
     } finally {
       setIsLoading(false);
     }

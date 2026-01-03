@@ -8,6 +8,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phone: String,
   role: { type: String, enum: ["customer", "restaurant", "admin", "delivery"], default: "customer" },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
 
 export default mongoose.model("User", userSchema);

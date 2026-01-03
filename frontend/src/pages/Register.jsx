@@ -6,6 +6,7 @@ import { useState } from "react";
 import { validateEmail, validatePassword, validatePhone } from "../utils/validation";
 import { Eye, EyeOff, Loader2, UserPlus, Phone } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
 
 const COUNTRY_CODES = [
   { code: "+880", country: "BD" },
@@ -35,15 +36,15 @@ export default function Register() {
 
     // Validation
     const emailError = validateEmail(email);
-    if (emailError) return alert(emailError);
+    if (emailError) return toast.error(emailError);
 
     const passError = validatePassword(password);
-    if (passError) return alert(passError);
+    if (passError) return toast.error(passError);
 
     // Combine country code and phone for validation and submission
     const fullPhone = `${countryCode}${phone}`;
     const phoneError = validatePhone(fullPhone);
-    if (phoneError) return alert(phoneError);
+    if (phoneError) return toast.error(phoneError);
 
     setIsLoading(true);
     try {
@@ -51,10 +52,10 @@ export default function Register() {
         "/auth/register",
         { name, email, password, phone: fullPhone, role }
       );
-      // alert("Account created successfully 🎉");
+      toast.success("Account created successfully 🎉");
       navigate("/login");
     } catch (err) {
-      alert(err.response?.data?.msg || "Registration failed");
+      toast.error(err.response?.data?.msg || "Registration failed");
     } finally {
       setIsLoading(false);
     }
