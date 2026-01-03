@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserCircle, UtensilsCrossed, ShoppingCart } from "lucide-react";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   return (
     <nav className="flex items-center justify-between px-8 py-4 fixed w-full top-0 left-0 z-50 bg-white/10 backdrop-blur-md border-b border-white/20 shadow-sm">
 
@@ -15,7 +16,7 @@ export default function Navbar() {
         </div>
       </Link>
 
-      {/* Actions: Cart & Profile */}
+
       {/* Actions: Cart & Profile */}
       <div className="flex items-center gap-6">
         {localStorage.getItem("token") ? (
@@ -33,7 +34,7 @@ export default function Navbar() {
               onClick={() => {
                 localStorage.removeItem("user");
                 localStorage.removeItem("token");
-                window.location.href = "/login";
+                navigate("/login");
               }}
               className="text-white hover:text-red-300 font-bold ml-2"
             >
