@@ -43,13 +43,9 @@
 *   **Framework**: Express.js
 *   **Database**: MongoDB (Mongoose ODM)
 *   **Auth**: JSON Web Token (JWT), BcryptJS
-
----
-## Deployment 
-
-*  **Link**: https://bitebuddy-nine.vercel.app/
   
 ---
+
 ## 🚀 Getting Started
 
 Follow these steps to run BiteBuddy locally.
@@ -131,8 +127,9 @@ BiteBuddy/
 *   **Frontend**: Recommended on [Vercel](https://vercel.com).
 *   **Backend**: Recommended on [Render](https://render.com).
 *   **Database**: [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+*    **Link**: https://bitebuddy-nine.vercel.app/
 
-See [`deployment_guide.md`](./deployment_guide.md) for detailed instructions.
+
 
 ---
 
