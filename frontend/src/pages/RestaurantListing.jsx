@@ -1,5 +1,4 @@
 
-//src/pages/RestaurantListing.jsx
 import React, { useEffect, useState } from "react";
 import RestaurantCard from "../components/RestaurantCard";
 import FilterBar from "../components/FilterBar";

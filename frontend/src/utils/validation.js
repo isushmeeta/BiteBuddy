@@ -1,4 +1,3 @@
-// utils/validation.js
 
 export const validateEmail = (email) => {
   const allowedDomains = [

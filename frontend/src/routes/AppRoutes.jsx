@@ -1,4 +1,3 @@
-//src/routes/AppRoutes.jsx
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 

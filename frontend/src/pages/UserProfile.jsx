@@ -1,10 +1,7 @@
-//frontend/src/pages/UserProfile.jsx
-// frontend/src/pages/UserProfile.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 
-// Minimal Button component
 function Button({ children, onClick, variant = "primary", className = "" }) {
   let base = "px-4 py-2 rounded font-semibold ";
   if (variant === "destructive") base += "bg-red-500 text-white";

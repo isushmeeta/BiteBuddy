@@ -1,5 +1,4 @@
 
-//src/pages/Checkout.jsx/
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
@@ -8,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, CreditCard, Loader2, MapPin, Phone, Truck, Wallet, Banknote } from "lucide-react";
 import { toast } from "react-hot-toast";
 
-// Import Logos
 import bkashLogo from "../assets/bkash.svg";
 import nagadLogo from "../assets/nagad.svg";
 import rocketLogo from "../assets/rocket.svg";
@@ -19,12 +17,10 @@ export default function Checkout() {
   const [phone, setPhone] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
 
-  // Pay Online State
   const [onlineProvider, setOnlineProvider] = useState(""); // 'Bkash', 'Nagad', 'Rocket'
   const [mobileDetails, setMobileDetails] = useState({ number: "", pin: "" });
 
 
-  // Card Payment State
   const [cardDetails, setCardDetails] = useState({
     number: "",
     expiry: "",

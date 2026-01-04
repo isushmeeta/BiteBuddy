@@ -26,11 +26,6 @@ export default function AdminDashboard() {
         setOrders(resOrders.data.orders);
         setPartners(resPartners.data.partners);
 
-        // If no restaurant selected and we have restaurants, select the first one
-        if (!restaurantId && resRest.data.restaurants.length > 0) {
-          // Optional: Auto-select could be confusing if they just want to see orders. 
-          // Let's leave it as is, "Select Restaurant" prompt is fine.
-        }
 
       } catch (error) {
         console.error("Failed to fetch data:", error);
