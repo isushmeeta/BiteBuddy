@@ -22,17 +22,22 @@ app.use(cookieParser());
 const allowedOrigins = [
   process.env.CLIENT_URL,
   'http://localhost:5173',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000'
 ].filter(Boolean);
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      console.log("CORS origin:", origin);
+      // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
+
+      if (allowedOrigins.includes(origin) || origin.startsWith('chrome-extension://')) {
         return callback(null, true);
       }
+
+      console.log("CORS blocked for origin:", origin);
       return callback(null, false);
     },
     credentials: true,
