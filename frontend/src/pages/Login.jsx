@@ -23,17 +23,17 @@ export default function Login() {
         { email, password },
         { withCredentials: true }
       );
-      // alert("Login Successful 🎉"); // Removed alert for better UX, maybe use toast later
+      // alert("Login Successful "); 
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      localStorage.setItem("token", res.data.token); // Store token backup
+      localStorage.setItem("token", res.data.token); 
 
       const role = res.data.user.role;
       if (role === "admin") {
-        navigate("/admin/dashboard"); // Or wherever admin goes
+        navigate("/admin/dashboard"); 
       } else if (role === "delivery") {
         navigate("/delivery");
       } else if (role === "restaurant") {
-        navigate("/restaurants"); // Or specific restaurant dashboard
+        navigate("/restaurants"); 
       } else {
         navigate("/restaurants");
       }

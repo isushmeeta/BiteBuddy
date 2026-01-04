@@ -14,7 +14,7 @@ export default function Profile() {
   });
   const [isSaving, setIsSaving] = useState(false);
 
-  // Hardcode temporarily OR get from logged-in user
+
   const restaurantId = "69196fbc97e5bd83bb17cb2e";
 
   useEffect(() => {
